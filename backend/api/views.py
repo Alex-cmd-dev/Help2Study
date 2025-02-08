@@ -27,5 +27,13 @@ class SummaryListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+class SummaryDelete(generics.DestroyAPIView):
+    serializer_class = SummarySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user1 = self.request.user
+        return Summary.objects.filter(user=user1)
+
         
         
