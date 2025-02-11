@@ -1,14 +1,22 @@
+import magic
+
+
 def processfile(request):
     if request.method == 'POST':
         uploaded_file = request.FILES['file']
-        # Get the Content-Type header from the request
-        content_type = request.headers.get('Content-Type', '')
-        # Check if the file is a text file
-        if not content_type.startswith('text/'):
-            return "Only text files are allowed"
-            
+        mime = magic.Magic(mime=True)
+        file_type = mime.from_buffer(uploaded_file.read(2048),mime=True)
+        text = totext(file_type)
+        
+        
         # Proceed with processing...
-        file_content = uploaded_file.read()
 
-        
-        
+def totext(file_type):
+    if file_type == 'text/plain':
+            pass
+    elif file_type == 'application/pdf':
+            pass
+    elif file_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+            pass
+    else:
+          pass
