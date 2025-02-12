@@ -32,7 +32,7 @@ def toText(file_type, file):
         ):
             return docx_to_text(file)
     except Exception as e:
-        raise
+        return {"message": f"Invalid file type : {e}"}
 
 
 def pdf_to_text(pdf):
@@ -45,7 +45,7 @@ def pdf_to_text(pdf):
                 text += page.extract_text
             return text
     except Exception as e:
-        raise
+        raise ValueError(f"Failed to read pdf file: {e}")
 
 
 def txt_to_text(txt):
@@ -53,7 +53,7 @@ def txt_to_text(txt):
         with open(txt, "r", encoding="utf-8") as file:
             return file.read()
     except Exception as e:
-        raise
+        raise ValueError(f"Failed to read txt file: {e}")
 
 
 def docx_to_text(docx):
@@ -61,4 +61,4 @@ def docx_to_text(docx):
         text = docx2txt.process(f"{docx}")
         return text
     except Exception as e:
-        raise
+        raise ValueError(f"Failed to read docx file: {e}")
