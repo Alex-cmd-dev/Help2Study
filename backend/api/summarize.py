@@ -4,8 +4,8 @@ import PyPDF2
 import docx2txt
 
 
-def summarize():
-    pass
+def summarize(text):
+    return gemini(text)
 
 
 def processfile(request):
@@ -15,6 +15,8 @@ def processfile(request):
         file_type = mime.from_buffer(uploaded_file.read(4096), mime=True)
         try:
             text = toText(file_type, uploaded_file)
+            summary = summarize(text)
+            return {"summary": f"{summary}"}
         except Exception as e:
             return {"message": f"Error : {e}"}
 
