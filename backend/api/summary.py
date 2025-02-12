@@ -1,47 +1,57 @@
 import magic
 import PyPDF2
+import docx2txt
 
 
 def processfile(request):
-    if request.method == 'POST':
-        uploaded_file = request.FILES['file']
+    if request.method == "POST":
+        uploaded_file = request.FILES["file"]
         mime = magic.Magic(mime=True)
-        file_type = mime.from_buffer(uploaded_file.read(2048),mime=True)
-        text = toText(file_type)
-
-def toText(file_type):
-    if file_type == 'text/plain':
-            pass
-    elif file_type == 'application/pdf':
-            pass
-    elif file_type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-            pass
-    else:
-          pass
+        file_type = mime.from_buffer(uploaded_file.read(2048), mime=True)
+        text = toText(file_type,uploaded_file)
+        
 
 
-
-
-
-
-def pdf_to_text(pdf_path):
+def toText(file_type,file):
     try:
-          with open(pdf_path, 'rb') as pdf_file:
-               pdf_reader = PyPDF2.PdfReader(pdf_file)
-               text = ''
-               for page_num in range(len(pdf_reader.pages)):
+        if file_type == "text/plain":
+            return txt_to_text(file)
+            
+        elif file_type == "application/pdf":
+            return pdf_to_text(file)
+        elif (
+            file_type
+            == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ):
+            return docx_to_text(file)
+    except Exception as e:
+        return {"message": f"Error opening file type: {e}"}
+
+
+def pdf_to_text(pdf):
+    try:
+        with open(pdf, "rb") as pdf_file:
+            pdf_reader = PyPDF2.PdfReader(pdf_file)
+            text = ""
+            for page_num in range(len(pdf_reader.pages)):
                 page = pdf_reader.pages[page_num]
                 text += page.extract_text
+            return text
     except Exception as e:
-       return {'message': f'Error opening file type: {e}'}
-    return text
-    
-def txt_to_text(txt_path):
-    
+        return {"message": f"Error opening file type: {e}"}
 
-         
-               
-        
-         
-    
 
+def txt_to_text(txt):
+    try:
+        with open(txt, "r", encoding="utf-8") as file:
+            return file.read()
+    except Exception as e:
+        return {"message": f"Error opening file type: {e}"}
+
+
+def docx_to_text(docx):
+    try:
+        text = docx2txt.process(f"{docx}")
+        return text
+    except Exception as e:
+        return {"message": f"Error opening file type: {e}"}
