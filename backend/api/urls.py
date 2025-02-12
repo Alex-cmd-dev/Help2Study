@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from backend.api.summary import processfile
+from backend.api.summarize import processfile
 
 
 urlpatterns = [

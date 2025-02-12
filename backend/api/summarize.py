@@ -1,22 +1,29 @@
+from . import gemini
 import magic
 import PyPDF2
 import docx2txt
+
+
+def summarize():
+    pass
 
 
 def processfile(request):
     if request.method == "POST":
         uploaded_file = request.FILES["file"]
         mime = magic.Magic(mime=True)
-        file_type = mime.from_buffer(uploaded_file.read(2048), mime=True)
-        text = toText(file_type,uploaded_file)
-        
+        file_type = mime.from_buffer(uploaded_file.read(4096), mime=True)
+        try:
+            text = toText(file_type, uploaded_file)
+        except Exception as e:
+            return {"message": f"Error : {e}"}
 
 
-def toText(file_type,file):
+def toText(file_type, file):
     try:
         if file_type == "text/plain":
             return txt_to_text(file)
-            
+
         elif file_type == "application/pdf":
             return pdf_to_text(file)
         elif (
@@ -25,7 +32,7 @@ def toText(file_type,file):
         ):
             return docx_to_text(file)
     except Exception as e:
-        return {"message": f"Error opening file type: {e}"}
+        raise
 
 
 def pdf_to_text(pdf):
@@ -38,7 +45,7 @@ def pdf_to_text(pdf):
                 text += page.extract_text
             return text
     except Exception as e:
-        return {"message": f"Error opening file type: {e}"}
+        raise
 
 
 def txt_to_text(txt):
@@ -46,7 +53,7 @@ def txt_to_text(txt):
         with open(txt, "r", encoding="utf-8") as file:
             return file.read()
     except Exception as e:
-        return {"message": f"Error opening file type: {e}"}
+        raise
 
 
 def docx_to_text(docx):
@@ -54,4 +61,4 @@ def docx_to_text(docx):
         text = docx2txt.process(f"{docx}")
         return text
     except Exception as e:
-        return {"message": f"Error opening file type: {e}"}
+        raise
