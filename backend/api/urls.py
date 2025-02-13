@@ -1,10 +1,9 @@
 from django.urls import path
 from . import views
-from backend.api.summarize import processfile
 
 
 urlpatterns = [
-    path('summaries/', views.SummaryListCreate.as_view(),name="note-list"),
+    path('summaries/', views.SummaryListCreate.as_view(),name="summary-list"),
     path('summaries/delete/<int:pk>', views.SummaryDelete.as_view(),name="delete-summary"),
-    path('summarize/', processfile,name="process-file")#work is needed
+    path('summarize/', views.FileUpload.as_view(),name="process-file")
 ]

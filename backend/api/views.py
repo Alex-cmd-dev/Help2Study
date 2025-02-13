@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, SummarySerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Summary
@@ -35,3 +38,6 @@ class SummaryDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user1 = self.request.user
         return Summary.objects.filter(user=user1)
+    
+class FileUpload(APIView):
+    
