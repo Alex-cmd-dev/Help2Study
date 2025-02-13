@@ -7,6 +7,7 @@ from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, SummarySerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Summary
+from .summarize import processfile
 
 
 # creates new user
@@ -38,6 +39,21 @@ class SummaryDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user1 = self.request.user
         return Summary.objects.filter(user=user1)
-    
+
+
 class FileUpload(APIView):
-    
+    parser_classes = MultiPartParser
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        uploaded_file = request.FILES.get("file")
+        if not uploaded_file:
+            return Response({"error": "No file uploaded"}, status=400)
+        try:
+            summary_text = processfile(uploaded_file)
+            summary = Summary.objects.create(user=request.user, content=summary_text, title=)
+            serializer = SummarySerializer(summary)
+            return Response(serializer.data, status=201)
+
+        except Exception as e:
+            return Response({"error": f"Processing failed: {str(e)}"}, status=500)

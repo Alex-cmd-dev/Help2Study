@@ -8,17 +8,15 @@ def summarize(text):
     return gemini(text)
 
 
-def processfile(request):
-    if request.method == "POST":
-        uploaded_file = request.FILES["file"]
-        mime = magic.Magic(mime=True)
-        file_type = mime.from_buffer(uploaded_file.read(4096), mime=True)
-        try:
-            text = toText(file_type, uploaded_file)
-            summary = summarize(text)
-            return {"summary": f"{summary}"}
-        except Exception as e:
-            return {"message": f"Error : {e}"}
+def processfile(uploaded_file):
+    mime = magic.Magic(mime=True)
+    file_type = mime.from_buffer(uploaded_file.read(4096), mime=True)
+    try:
+        text = toText(file_type, uploaded_file)
+        summary = summarize(text)
+        return summary
+    except Exception as e:
+        raise ValueError(f"Failed to process file: {str(e)}")
 
 
 def toText(file_type, file):
@@ -33,8 +31,10 @@ def toText(file_type, file):
             == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ):
             return docx_to_text(file)
+        else:
+            raise Exception(f"Unsupported file type: {file_type}")
     except Exception as e:
-        return {"message": f"Invalid file type : {e}"}
+        raise ValueError(f"Something went wrong: {str(e)}")
 
 
 def pdf_to_text(pdf):
@@ -47,7 +47,7 @@ def pdf_to_text(pdf):
                 text += page.extract_text
             return text
     except Exception as e:
-        raise ValueError(f"Failed to read pdf file: {e}")
+        raise ValueError(f"Failed to read pdf file: {str(e)}")
 
 
 def txt_to_text(txt):
@@ -55,7 +55,7 @@ def txt_to_text(txt):
         with open(txt, "r", encoding="utf-8") as file:
             return file.read()
     except Exception as e:
-        raise ValueError(f"Failed to read txt file: {e}")
+        raise ValueError(f"Failed to read txt file: {str(e)}")
 
 
 def docx_to_text(docx):
@@ -63,4 +63,4 @@ def docx_to_text(docx):
         text = docx2txt.process(f"{docx}")
         return text
     except Exception as e:
-        raise ValueError(f"Failed to read docx file: {e}")
+        raise ValueError(f"Failed to read docx file: {str(e)}")
