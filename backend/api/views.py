@@ -42,16 +42,19 @@ class SummaryDelete(generics.DestroyAPIView):
 
 
 class FileUpload(APIView):
-    parser_classes = MultiPartParser
+    parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         uploaded_file = request.FILES.get("file")
+        title = request.data.get("title")
         if not uploaded_file:
             return Response({"error": "No file uploaded"}, status=400)
         try:
             summary_text = processfile(uploaded_file)
-            summary = Summary.objects.create(user=request.user, content=summary_text, title=)
+            summary = Summary.objects.create(
+                user=request.user, content=summary_text, title=title
+            )
             serializer = SummarySerializer(summary)
             return Response(serializer.data, status=201)
 
