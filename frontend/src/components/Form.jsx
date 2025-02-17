@@ -36,20 +36,20 @@ function Form({ route, method }) {
         <form onSubmit={handleSubmit} className="form-container">
             <h1>{name}</h1>
             <input
-                className="form-input"
+                className=""
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 placeholder="Username"
             />
             <input
-                className="form-input"
+                className=""
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Password"
             />
-            {loading && <LoadingIndicator />}
+
             <button className="form-button" type="submit">
                 {name}
             </button>
