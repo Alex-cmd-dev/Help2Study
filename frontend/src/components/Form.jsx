@@ -32,30 +32,32 @@ function Form({ route, method }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="">
-      <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
-        <legend className="fieldset-legend">{name}</legend>
+    <form onSubmit={handleSubmit} className="w-full max-w-lg">
+      <fieldset className="fieldset w-full bg-base-200 border border-base-300 p-6 rounded-box shadow-lg">
+        <legend className="fieldset-legend text-xl font-semibold">
+          {name}
+        </legend>
 
-        <label className="fieldset-label">Username</label>
+        <label className="fieldset-label text-lg mt-2">Username</label>
         <input
           type="text"
-          className="input"
+          className="input input-lg w-full p-3"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           placeholder="Username"
         />
 
-        <label className="fieldset-label">Password</label>
+        <label className="fieldset-label text-lg mt-4">Password</label>
         <input
           type="password"
-          className="input"
+          className="input input-lg w-full p-3"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
         />
 
-        <button className="btn btn-neutral mt-4" type="submit">
-          Login
+        <button className="btn btn-neutral btn-lg mt-6 w-full" type="submit">
+          {name}
         </button>
       </fieldset>
     </form>
