@@ -3,7 +3,6 @@ import api from "../api";
 import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 
-
 function Form({ route, method }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -33,26 +32,32 @@ function Form({ route, method }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <h1>{name}</h1>
-      <input
-        className=""
-        type="text"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        placeholder="Username"
-      />
-      <input
-        className=""
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
+    <form onSubmit={handleSubmit} className="">
+      <fieldset className="fieldset w-xs bg-base-200 border border-base-300 p-4 rounded-box">
+        <legend className="fieldset-legend">{name}</legend>
 
-      <button className="form-button" type="submit">
-        {name}
-      </button>
+        <label className="fieldset-label">Username</label>
+        <input
+          type="text"
+          className="input"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Username"
+        />
+
+        <label className="fieldset-label">Password</label>
+        <input
+          type="password"
+          className="input"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
+
+        <button className="btn btn-neutral mt-4" type="submit">
+          Login
+        </button>
+      </fieldset>
     </form>
   );
 }
