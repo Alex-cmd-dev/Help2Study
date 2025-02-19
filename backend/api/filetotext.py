@@ -1,11 +1,7 @@
-from . import gemini
 import magic
 import PyPDF2
 import docx2txt
-
-
-def summarize(text):
-    return gemini(text)
+from summary import summarize
 
 
 def processfile(uploaded_file):

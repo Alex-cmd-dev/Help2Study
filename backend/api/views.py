@@ -7,7 +7,7 @@ from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, SummarySerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Summary
-from .summarize import processfile
+from .filetotext import processfile
 
 
 # creates new user
