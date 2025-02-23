@@ -26,7 +26,7 @@ class TopicListCreate(generics.ListCreateAPIView):
         return Topic.objects.filter(user=user)
 
     def perform_create(self, serializer):
-        if serializer.isvalid():
+        if serializer.is_valid():
             serializer.save(user=self.request.user)
         else:
             print(serializer.errors)
@@ -47,14 +47,15 @@ class FlashcardListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        topic_name = self.request.query_params.get("topic")
+        topic_name = self.request.query_params.get("topic") #get requests
         return Flashcard.objects.filter(user=user,topic__name=topic_name)
     
     def perform_create(self, serializer):
-        topic_name = self.request.query_params.get("topic")
-        topic = Topic.objects.filter()
-        if serializer.isvalid():
-            serializer.save(user=self.request.user,)
+        topic_id = self.request.data.get("id")
+        user = self.request.user
+        topic = Topic.objects.get(user=user, id=topic_id)
+        if serializer.is_valid():
+            serializer.save(user=user,topic = topic)
         else:
             print(serializer.errors)
 
