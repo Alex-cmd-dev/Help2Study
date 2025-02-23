@@ -20,3 +20,5 @@ class SummarySerializer(serializers.ModelSerializer):
         model = Summary
         fields = ["id","title","content","created_at","user"]
         extra_kwargs = {"user":{"read_only":True}}
+
+class Flash

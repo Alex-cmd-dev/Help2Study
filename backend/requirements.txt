@@ -11,7 +11,4 @@ python-dotenv
 python-magic
 PyPDF2
 docx2txt
-transformers
-langchain
-langchain-huggingface
-torch
+

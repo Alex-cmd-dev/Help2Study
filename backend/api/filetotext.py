@@ -1,7 +1,7 @@
 import magic
 import PyPDF2
 import docx2txt
-from summary import summarize
+
 
 
 def processfile(uploaded_file):
@@ -9,7 +9,6 @@ def processfile(uploaded_file):
     file_type = mime.from_buffer(uploaded_file.read(4096), mime=True)
     try:
         text = toText(file_type, uploaded_file)
-        summary = summarize(text)
         return summary
     except Exception as e:
         raise ValueError(f"Failed to process file: {str(e)}")
@@ -40,7 +39,7 @@ def pdf_to_text(pdf):
             text = ""
             for page_num in range(len(pdf_reader.pages)):
                 page = pdf_reader.pages[page_num]
-                text += page.extract_text
+                text += page.extract_text()
             return text
     except Exception as e:
         raise ValueError(f"Failed to read pdf file: {str(e)}")
