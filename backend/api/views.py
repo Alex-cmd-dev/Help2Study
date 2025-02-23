@@ -4,9 +4,9 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
-from .serializers import UserSerializer, SummarySerializer
+from .serializers import UserSerializer, TopicSerializer, FlashcardSerialzer
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from .models import Summary
+from .models import Topic, Flashcard
 from .filetotext import processfile
 
 
@@ -17,13 +17,13 @@ class CreateUserView(generics.CreateAPIView):
     permission_classes = [AllowAny]
 
 
-class SummaryListCreate(generics.ListCreateAPIView):
-    serializer_class = SummarySerializer
+class TopicListCreate(generics.ListCreateAPIView):
+    serializer_class = TopicSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user1 = self.request.user
-        return Summary.objects.filter(user=user1)
+        user = self.request.user
+        return Topic.objects.filter(user=user)
 
     def perform_create(self, serializer):
         if serializer.isvalid():
@@ -32,13 +32,31 @@ class SummaryListCreate(generics.ListCreateAPIView):
             print(serializer.errors)
 
 
-class SummaryDelete(generics.DestroyAPIView):
-    serializer_class = SummarySerializer
+class TopicDelete(generics.DestroyAPIView):
+    serializer_class = TopicSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user1 = self.request.user
-        return Summary.objects.filter(user=user1)
+        user = self.request.user
+        return Topic.objects.filter(user=user)
+
+
+class FlashcardListCreate(generics.ListCreateAPIView):
+    serializer_class = FlashcardSerialzer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        topic_name = self.request.query_params.get("topic")
+        return Flashcard.objects.filter(user=user,topic__name=topic_name)
+    
+    def perform_create(self, serializer):
+        topic_name = self.request.query_params.get("topic")
+        topic = Topic.objects.filter()
+        if serializer.isvalid():
+            serializer.save(user=self.request.user,)
+        else:
+            print(serializer.errors)
 
 
 class FileUpload(APIView):

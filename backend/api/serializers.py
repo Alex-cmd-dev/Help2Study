@@ -5,8 +5,6 @@ from .models import Topic, Flashcard
 """
 converts it from python to json
 """
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -16,7 +14,6 @@ class UserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
-
 
 class FlashcardSerialzer(serializers.ModelSerializer):
     class Meta:
@@ -28,4 +25,5 @@ class FlashcardSerialzer(serializers.ModelSerializer):
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Topic
-        fields = ["id", "name", "created_at"]
+        fields = ["id", "name", "created_at" , "user"]
+        extra_kwargs = {"user": {"read_only": True} }

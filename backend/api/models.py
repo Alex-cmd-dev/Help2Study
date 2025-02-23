@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 
 
 class Topic(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="user_flashcards"
+    )
     name = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
