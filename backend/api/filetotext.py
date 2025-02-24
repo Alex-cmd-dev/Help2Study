@@ -1,5 +1,4 @@
 import magic
-import PyPDF2
 import docx2txt
 
 
@@ -16,12 +15,7 @@ def processfile(uploaded_file):
 
 def toText(file_type, file):
     try:
-        if file_type == "text/plain":
-            return txt_to_text(file)
-
-        elif file_type == "application/pdf":
-            return pdf_to_text(file)
-        elif (
+        if (
             file_type
             == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         ):
@@ -30,28 +24,6 @@ def toText(file_type, file):
             raise Exception(f"Unsupported file type: {file_type}")
     except Exception as e:
         raise ValueError(f"Something went wrong: {str(e)}")
-
-
-def pdf_to_text(pdf):
-    try:
-        with open(pdf, "rb") as pdf_file:
-            pdf_reader = PyPDF2.PdfReader(pdf_file)
-            text = ""
-            for page_num in range(len(pdf_reader.pages)):
-                page = pdf_reader.pages[page_num]
-                text += page.extract_text()
-            return text
-    except Exception as e:
-        raise ValueError(f"Failed to read pdf file: {str(e)}")
-
-
-def txt_to_text(txt):
-    try:
-        with open(txt, "r", encoding="utf-8") as file:
-            return file.read()
-    except Exception as e:
-        raise ValueError(f"Failed to read txt file: {str(e)}")
-
 
 def docx_to_text(docx):
     try:

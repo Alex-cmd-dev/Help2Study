@@ -59,14 +59,22 @@ class FlashcardListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+class FlashcardDelete(generics.DestroyAPIView):
+    serializer_class = FlashcardSerialzer
+    permission_classes = [IsAuthenticated]
 
-class FileUpload(APIView):
+    def get_queryset(self):
+        user = self.request.user
+        return Topic.objects.filter(user=user)
+
+
+class CreateFlashcards(APIView):
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
         uploaded_file = request.FILES.get("file")
-        title = request.data.get("title")
+        title = request.data.get("topic")
         if not uploaded_file:
             return Response({"error": "No file uploaded"}, status=400)
         try:

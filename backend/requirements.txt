@@ -8,7 +8,7 @@ pytz
 sqlparse
 psycopg2-binary
 python-dotenv
-python-magic
-PyPDF2
 docx2txt
+google-genai
+python-magic
 

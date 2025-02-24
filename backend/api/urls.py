@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    path('summaries/', views.SummaryListCreate.as_view(),name="summary-list"),
-    path('summaries/delete/<int:pk>', views.SummaryDelete.as_view(),name="delete-summary"),
-    path('summarize/', views.FileUpload.as_view(),name="upload-file")
+    path('topics/', views.TopicListCreate.as_view(),name="topic-list"),
+    path('topic/delete/<int:pk>', views.TopicDelete.as_view(),name="delete-topic"),
+    path('flashcards/', views.FileUpload.as_view(),name="upload-file")
 ]
