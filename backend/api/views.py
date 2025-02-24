@@ -7,7 +7,7 @@ from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, TopicSerializer, FlashcardSerialzer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
-from .filetotext import processfile
+from geminiapi import processfile
 
 
 # creates new user
