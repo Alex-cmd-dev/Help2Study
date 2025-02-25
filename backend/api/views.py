@@ -7,7 +7,7 @@ from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, TopicSerializer, FlashcardSerialzer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
-from geminiapi import processfile
+from geminiapi import create_flashcards, processfile
 
 
 # creates new user
@@ -47,17 +47,18 @@ class FlashcardListCreate(generics.ListCreateAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        topic_name = self.request.query_params.get("topic") #get requests
-        return Flashcard.objects.filter(user=user,topic__name=topic_name)
-    
+        topic_name = self.request.query_params.get("topic")  # get requests
+        return Flashcard.objects.filter(user=user, topic__name=topic_name)
+
     def perform_create(self, serializer):
         topic_id = self.request.data.get("id")
         user = self.request.user
         topic = Topic.objects.get(user=user, id=topic_id)
         if serializer.is_valid():
-            serializer.save(user=user,topic = topic)
+            serializer.save(user=user, topic=topic)
         else:
             print(serializer.errors)
+
 
 class FlashcardDelete(generics.DestroyAPIView):
     serializer_class = FlashcardSerialzer
@@ -77,8 +78,12 @@ class CreateFlashcards(APIView):
         title = request.data.get("topic")
         if not uploaded_file:
             return Response({"error": "No file uploaded"}, status=400)
+
+        file_path = processfile(uploaded_file)
+        flashcards = create_flashcards(file_path)
+
         try:
-            summary_text = processfile(uploaded_file)
+            summary_text = flashcards(file_path)
             summary = Summary.objects.create(
                 user=request.user, content=summary_text, title=title
             )

@@ -1,26 +1,27 @@
 from google import genai
 from google.genai import types
-import magic
 import docx2txt
+from django.conf import settings
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+genai.configure(api_key=os.getenv("API_KEY"))
 
 
-def flashcards():
+def create_flashcards(file_path):
+    
     pass
 
 
-
-
-
-
-
 def processfile(uploaded_file):
-    mime = magic.Magic(mime=True)
-    file_type = mime.from_buffer(uploaded_file.read(4096), mime=True)
-    try:
-        text = toText(file_type, uploaded_file)
-        return summary
-    except Exception as e:
-        raise ValueError(f"Failed to process file: {str(e)}")
+    temp_dir = os.path.join(settings.BASE_DIR, "temp_files")
+    os.makedirs(temp_dir, exist_ok=True)  # Ensure directory exists
+    file_path = os.path.join(temp_dir, uploaded_file.name)
+    with open(file_path, "wb+") as destination:
+        for chunk in uploaded_file.chunks():
+            destination.write(chunk)
+    return file_path
 
 
 def toText(file_type, file):
@@ -34,6 +35,7 @@ def toText(file_type, file):
             raise Exception(f"Unsupported file type: {file_type}")
     except Exception as e:
         raise ValueError(f"Something went wrong: {str(e)}")
+
 
 def docx_to_text(docx):
     try:
