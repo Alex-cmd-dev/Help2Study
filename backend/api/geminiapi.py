@@ -1,4 +1,4 @@
-from google import generativeai as genai
+from google import genai
 import docx2txt
 from django.conf import settings
 from dotenv import load_dotenv
@@ -10,7 +10,7 @@ load_dotenv()
 
 # Configure the API
 api_key = os.getenv("API_KEY")
-genai.configure(api_key=api_key)
+
 
 # Function to process uploaded file and save it temporarily
 def processfile(uploaded_file):
@@ -53,7 +53,7 @@ def read_text_file(file_path):
 # Function to generate flashcards from text
 def text_2flashcards(text):
     try:
-        model = genai.GenerativeModel('gemini-1.5-pro')
+        model = genai.GenerativeModel('gemini-2.0-flash')
         response = model.generate_content(
             "Create flashcards in question and answer format based on the following content:\n\n" + text
         )
