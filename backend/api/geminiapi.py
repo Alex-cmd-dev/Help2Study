@@ -1,40 +1,18 @@
-from google import genai
+from google import generativeai as genai
 import docx2txt
 from django.conf import settings
 from dotenv import load_dotenv
 import os
+import PyPDF2
 
+# Load environment variables
 load_dotenv()
-client = genai.Client(api_key=os.getenv("API_KEY"))
 
+# Configure the API
+api_key = os.getenv("API_KEY")
+genai.configure(api_key=api_key)
 
-def create_flashcards(file_path, mime_type):
-    try:
-        if mime_type in ["application/pdf", "text/plain"]:
-            uploaded_file = genai.upload_file(
-                path=f"{file_path}",
-                display_name="uploaded_file",
-                mime_type=f"{mime_type}",
-            )
-            file = genai.get_file(name=uploaded_file.name)
-        elif (
-            mime_type
-            == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        ):
-            toText()
-
-    except Exception as e:
-        raise ValueError(f"Something went wrong: {str(e)}")
-
-    if file:
-        model = genai.GenerativeModel(model_name="models/gemini-2.0-flash")
-        response = client.models.generate_content(
-            model="gemini-2.0-flash", contents=["How does AI work?", uploaded_file]
-        )
-
-    pass
-
-
+# Function to process uploaded file and save it temporarily
 def processfile(uploaded_file):
     temp_dir = os.path.join(settings.BASE_DIR, "temp_files")
     os.makedirs(temp_dir, exist_ok=True)  # Ensure directory exists
@@ -44,23 +22,61 @@ def processfile(uploaded_file):
             destination.write(chunk)
     return file_path
 
-
-def toText(file_type, file):
+# Function to extract text from PDF
+def pdf_to_text(file_path):
     try:
-        if (
-            file_type
-            == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        ):
-            return docx_to_text(file)
-        else:
-            raise Exception(f"Unsupported file type: {file_type}")
+        text = ""
+        with open(file_path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
+            for page_num in range(len(reader.pages)):
+                text += reader.pages[page_num].extract_text()
+        return text
     except Exception as e:
-        raise ValueError(f"Something went wrong: {str(e)}")
+        raise ValueError(f"Failed to read PDF file: {str(e)}")
 
-
-def docx_to_text(docx):
+# Function to extract text from DOCX
+def docx_to_text(file_path):
     try:
-        text = docx2txt.process(f"{docx}")
+        text = docx2txt.process(file_path)
         return text
     except Exception as e:
         raise ValueError(f"Failed to read docx file: {str(e)}")
+
+# Function to extract text from TXT
+def read_text_file(file_path):
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return file.read()
+    except Exception as e:
+        raise ValueError(f"Failed to read text file: {str(e)}")
+
+# Function to generate flashcards from text
+def text_2flashcards(text):
+    try:
+        model = genai.GenerativeModel('gemini-1.5-pro')
+        response = model.generate_content(
+            "Create flashcards in question and answer format based on the following content:\n\n" + text
+        )
+        return response.text
+    except Exception as e:
+        raise ValueError(f"Failed to generate flashcards: {str(e)}")
+
+# Main function to create flashcards from files
+def create_flashcards(file_path, mime_type):
+    try:
+        # Extract text based on file type
+        if mime_type == "application/pdf":
+            text = pdf_to_text(file_path)
+        elif mime_type == "text/plain":
+            text = read_text_file(file_path)
+        elif mime_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            text = docx_to_text(file_path)
+        else:
+            raise Exception(f"Unsupported file type: {mime_type}")
+        
+        # Generate flashcards from extracted text
+        flashcards = text_2flashcards(text)
+        return flashcards
+        
+    except Exception as e:
+        raise ValueError(f"Something went wrong: {str(e)}")

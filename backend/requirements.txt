@@ -11,4 +11,6 @@ python-dotenv
 docx2txt
 google-genai
 python-magic
+PyPDF2
+
 
