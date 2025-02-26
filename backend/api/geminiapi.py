@@ -8,10 +8,21 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("API_KEY"))
 
 
-def create_flashcards(file_path,mime_type):
+def create_flashcards(file_path, mime_type):
     try:
-        uploaded_file = genai.upload_file(path=f"{file_path}", display_name="uploaded_file",mime_type=f"{mime_type}")
-        file = genai.get_file(name=uploaded_file.name)
+        if mime_type in ["application/pdf", "text/plain"]:
+            uploaded_file = genai.upload_file(
+                path=f"{file_path}",
+                display_name="uploaded_file",
+                mime_type=f"{mime_type}",
+            )
+            file = genai.get_file(name=uploaded_file.name)
+        elif (
+            mime_type
+            == "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        ):
+            toText()
+
     except Exception as e:
         raise ValueError(f"Something went wrong: {str(e)}")
 
