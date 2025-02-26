@@ -1,16 +1,26 @@
 from google import genai
-from google.genai import types
 import docx2txt
 from django.conf import settings
 from dotenv import load_dotenv
 import os
 
 load_dotenv()
-genai.configure(api_key=os.getenv("API_KEY"))
+client = genai.Client(api_key=os.getenv("API_KEY"))
 
 
-def create_flashcards(file_path):
-    
+def create_flashcards(file_path,mime_type):
+    try:
+        uploaded_file = genai.upload_file(path=f"{file_path}", display_name="uploaded_file",mime_type=f"{mime_type}")
+        file = genai.get_file(name=uploaded_file.name)
+    except Exception as e:
+        raise ValueError(f"Something went wrong: {str(e)}")
+
+    if file:
+        model = genai.GenerativeModel(model_name="models/gemini-2.0-flash")
+        response = client.models.generate_content(
+            model="gemini-2.0-flash", contents=["How does AI work?", uploaded_file]
+        )
+
     pass
 
 
