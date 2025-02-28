@@ -4,6 +4,7 @@ from django.conf import settings
 from dotenv import load_dotenv
 import os
 import PyPDF2
+import json
 
 # Load environment variables
 load_dotenv()
@@ -66,7 +67,15 @@ def text_2flashcards(text):
         response = client.models.generate_content(
             model="gemini-2.0-flash", contents=prompt
         )
-        return response.text
+        if response.text.startswith("```json"):
+            text = response.text[7:]
+        else:
+            text = response.text
+        if text.endswith("```"):
+            text = text[:-3]
+        flashcards_dict = json.loads(text)
+
+        return flashcards_dict
     except Exception as e:
         raise ValueError(f"Failed to generate flashcards: {str(e)}")
 
@@ -89,6 +98,7 @@ def create_flashcards(file_path, mime_type):
 
         # Generate flashcards from extracted text
         flashcards = text_2flashcards(text)
+
         return flashcards
 
     except Exception as e:
