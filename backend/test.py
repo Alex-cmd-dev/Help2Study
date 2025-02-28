@@ -7,13 +7,14 @@ import PyPDF2
 load_dotenv()
 
 # Configure the API
-api_key = os.getenv("API_KEY")
+client = genai.Client(api_key=os.getenv("API_KEY"))
+
 
 # Function to extract text from PDF
 def pdf_to_text(file_path):
     try:
         text = ""
-        with open(file_path, 'rb') as file:
+        with open(file_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
             for page_num in range(len(reader.pages)):
                 text += reader.pages[page_num].extract_text()
@@ -22,23 +23,26 @@ def pdf_to_text(file_path):
         print(f"Error reading PDF: {e}")
         return None
 
+
 # Extract text from the PDF file
-pdf_path = "Apology.pdf"
+pdf_path = "/Users/alexgallardo/Downloads/Phaedo.pdf"
 pdf_content = pdf_to_text(pdf_path)
 
+prompt = (f" Create flashcards in question and answer format based on the following content {pdf_content}"
+"""Use this JSON schema:
+
+Flashcards = {'question': str, 'answer': str}
+Return: list[Flashcards]"""
+)
+
+
+
 if pdf_content:
-    # Initialize the model
-    model = genai.GenerativeModel('gemini-2.0-flash')
-    
-    # Generate flashcards from the PDF content
-    response = model.generate_content(
-        "Create flashcards in question and answer format based on the following content from 'Apology' by Plato:\n\n" + pdf_content
+    response = client.models.generate_content(
+        model="gemini-2.0-flash",
+        contents=prompt
     )
-    
     # Print the generated flashcards
     print(response.text)
 else:
     print("Failed to extract text from the PDF file.")
-
-
-

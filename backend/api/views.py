@@ -75,7 +75,7 @@ class CreateFlashcards(APIView):
 
     def post(self, request):
         uploaded_file = request.FILES.get("file")
-        title = request.data.get("topic")
+        title = request.data.get("topicID")
         mime_type = uploaded_file.content_type
         if not uploaded_file:
             return Response({"error": "No file uploaded"}, status=400)
