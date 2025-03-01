@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
-class FlashcardSerialzer(serializers.ModelSerializer):
+class FlashcardSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flashcard
         fields = ["id", "topic", "question", "answer", "created_at", "user"]

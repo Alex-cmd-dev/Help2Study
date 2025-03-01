@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from rest_framework import generics
+from rest_framework import generics,status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
-from .serializers import UserSerializer, TopicSerializer, FlashcardSerialzer
+from .serializers import UserSerializer, TopicSerializer, FlashcardSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
 from geminiapi import create_flashcards, processfile
+import os
 
 
 # creates new user
@@ -61,7 +62,7 @@ class FlashcardListCreate(generics.ListCreateAPIView):
 
 
 class FlashcardDelete(generics.DestroyAPIView):
-    serializer_class = FlashcardSerialzer
+    serializer_class = FlashcardSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
@@ -73,26 +74,63 @@ class CreateFlashcards(APIView):
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
 
-    def post(self, request):
+    def post(self, request, topic_id):
         uploaded_file = request.FILES.get("file")
-        topic_id = request.data.get("topicID")
-        mime_type = uploaded_file.content_type
         if not uploaded_file:
-            return Response({"error": "No file uploaded"}, status=400)
+            return Response(
+                {"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        mime_type = uploaded_file.content_type
+        file_path = None
 
         try:
-            topic = Topic.objects.get(id=topic_id)  
+            topic = Topic.objects.get(id=topic_id)
             file_path = processfile(uploaded_file)
-            flashcards = create_flashcards(file_path,mime_type)
+            flashcards = create_flashcards(file_path, mime_type)
+
+            created_flashcards = []
             for flashcard in flashcards:
                 fcard = Flashcard.objects.create(
-                    user = request.user, topic=topic,
+                    user=request.user,
+                    topic=topic,
+                    question=flashcard["question"],
+                    answer=flashcard["answer"],
                 )
-            summary = Summary.objects.create(
-                user=request.user, content=summary_text, title=title
-            )
-            serializer = SummarySerializer(summary)
-            return Response(serializer.data, status=201)
+                created_flashcards.append(fcard)
 
+            # Clean up the temporary file
+            if file_path and os.path.exists(file_path):
+                os.remove(file_path)
+
+            # Use proper serializer with many=True for multiple objects
+            serializer = FlashcardSerializer(created_flashcards, many=True)
+
+            return Response(
+                {
+                    "success": f"Created {len(created_flashcards)} flashcards",
+                    "flashcards": serializer.data,
+                },
+                status=status.HTTP_201_CREATED,
+            )
+
+        except Topic.DoesNotExist:
+            return Response(
+                {"error": f"Topic with id {topic_id} does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         except Exception as e:
-            return Response({"error": f"Processing failed: {str(e)}"}, status=500)
+            # Clean up the temporary file in case of errors
+            if file_path and os.path.exists(file_path):
+                os.remove(file_path)
+                return Response(
+                    {"error": f"Processing failed: {str(e)}"},
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                )
+
+
+class FlashcardListByTopic(APIView):
+    def get(self, request, topic_id):
+        topic = get_object_or_404(Topic, id=topic_id)
+        flashcards = Flashcard.objects.filter(topic=topic)
+        serializer = FlashcardSerializer(flashcards, many=True)
+        return Response(serializer.data)
