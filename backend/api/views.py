@@ -75,14 +75,19 @@ class CreateFlashcards(APIView):
 
     def post(self, request):
         uploaded_file = request.FILES.get("file")
-        title = request.data.get("topicID")
+        topic_id = request.data.get("topicID")
         mime_type = uploaded_file.content_type
         if not uploaded_file:
             return Response({"error": "No file uploaded"}, status=400)
 
         try:
+            topic = Topic.objects.get(id=topic_id)  
             file_path = processfile(uploaded_file)
             flashcards = create_flashcards(file_path,mime_type)
+            for flashcard in flashcards:
+                fcard = Flashcard.objects.create(
+                    user = request.user, topic=topic,
+                )
             summary = Summary.objects.create(
                 user=request.user, content=summary_text, title=title
             )
