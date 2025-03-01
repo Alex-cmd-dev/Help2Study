@@ -7,7 +7,7 @@ from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, TopicSerializer, FlashcardSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
-from geminiapi import create_flashcards, processfile
+from .geminiapi import create_flashcards, processfile
 import os
 
 
@@ -43,7 +43,7 @@ class TopicDelete(generics.DestroyAPIView):
 
 
 class FlashcardListCreate(generics.ListCreateAPIView):
-    serializer_class = FlashcardSerialzer
+    serializer_class = FlashcardSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
