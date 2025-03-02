@@ -32,7 +32,7 @@ function Form({ route, method }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-lg">
+    <form onSubmit={handleSubmit} className="w-full max-w-lg" >
       <fieldset className="fieldset w-full bg-base-200 border border-base-300 p-6 rounded-box shadow-lg">
         <legend className="fieldset-legend text-xl font-semibold">
           {name}
