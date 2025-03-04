@@ -1,14 +1,13 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.models import User
-from rest_framework import generics,status
+from rest_framework import generics, status, serializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, TopicSerializer, FlashcardSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
-from .geminiapi import create_flashcards, processfile, handle_flashcard_creation
-import os
+from .geminiapi import handle_flashcard_creation
 
 
 # creates new user
@@ -28,13 +27,12 @@ class TopicListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            topic = serializer.save(user=self.request.user)
+            user = self.request.user
+            topic = serializer.save(user=user)
             uploaded_file = self.request.data.get("file")
             if not uploaded_file:
-                return Response(
-                {"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST
-            )
-            handle_flashcard_creation(uploaded_file,topic)
+                raise serializers.ValidationError({"error": "No file uploaded"})
+            handle_flashcard_creation(uploaded_file, topic, user)
         else:
             print(serializer.errors)
 
@@ -77,58 +75,9 @@ class FlashcardDelete(generics.DestroyAPIView):
         return Topic.objects.filter(user=user)
 
 
-class CreateFlashcards(APIView):
-    parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, topic_id):
-        uploaded_file = request.data.get("file")
-        if not uploaded_file:
-            return Response(
-                {"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST
-            )
-        mime_type = uploaded_file.content_type
-        try:
-            topic = Topic.objects.get(id=topic_id)
-            file_path = processfile(uploaded_file)
-            flashcards = create_flashcards(file_path, mime_type)
-
-            created_flashcards = []
-            for flashcard in flashcards:
-                fcard = Flashcard.objects.create(
-                    user=request.user,
-                    topic=topic,
-                    question=flashcard["question"],
-                    answer=flashcard["answer"],
-                )
-                created_flashcards.append(fcard)
-
-            # Clean up the temporary file
-            if file_path and os.path.exists(file_path):
-                os.remove(file_path)
-
-            # Use proper serializer with many=True for multiple objects
-            serializer = FlashcardSerializer(created_flashcards, many=True)
-
-            return Response(
-                {
-                    "success": f"Created {len(created_flashcards)} flashcards",
-                    "flashcards": serializer.data,
-                },
-                status=status.HTTP_201_CREATED,
-            )
-
-        except Topic.DoesNotExist:
-            return Response(
-                {"error": f"Topic with id {topic_id} does not exist"},
-                status=status.HTTP_404_NOT_FOUND,
-            )
-        
-
-
 class FlashcardListByTopic(APIView):
     def get(self, request, topic_id):
-        topic = get_object_or_404(Topic, id=topic_id)>
+        topic = get_object_or_404(Topic, id=topic_id)
         flashcards = Flashcard.objects.filter(topic=topic)
         serializer = FlashcardSerializer(flashcards, many=True)
         return Response(serializer.data)

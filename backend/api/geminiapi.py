@@ -7,6 +7,8 @@ import PyPDF2
 import json
 from .models import Flashcard
 from .serializers import FlashcardSerializer
+from rest_framework.response import Response
+from rest_framework import status
 
 # Load environment variables
 load_dotenv()
@@ -107,7 +109,7 @@ def create_flashcards(file_path, mime_type):
         raise ValueError(f"Something went wrong: {str(e)}")
 
 
-def handle_flashcard_creation(uploaded_file, topic):
+def handle_flashcard_creation(uploaded_file, topic, user):
     mime_type = uploaded_file.content_type
 
     try:
@@ -117,20 +119,19 @@ def handle_flashcard_creation(uploaded_file, topic):
         created_flashcards = []
         for flashcard in flashcards:
             fcard = Flashcard.objects.create(
-                user=request.user,
+                user=user,
                 topic=topic,
                 question=flashcard["question"],
                 answer=flashcard["answer"],
             )
             created_flashcards.append(fcard)
 
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
+        serializer = FlashcardSerializer(created_flashcards, many=True)
+
     except Exception as e:
         # Clean up the temporary file in case of errors
         if file_path and os.path.exists(file_path):
             os.remove(file_path)
-            return Response(
-                {"error": f"Processing failed: {str(e)}"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            )
-
-    pass
+        raise Exception(f"Processing failed: {str(e)}")

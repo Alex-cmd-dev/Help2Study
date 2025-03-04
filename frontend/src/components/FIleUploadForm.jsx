@@ -8,6 +8,7 @@ function FileUploadForm() {
   const [file, setFile] = useState(null);
 
   const createTopic = (e) => {
+    setLoading(true)
     e.preventDefault();
     api
       .post("/api/topics/", { topic })
@@ -21,15 +22,14 @@ function FileUploadForm() {
 
   const createFlashcards = (topicId) => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
     api
-      .post("/api/createflashcards/${topicId}/" , {file})
+      .post("/api/createflashcards/${topicId}/", formData)
       .then((res) => {
         if (res.status === 201) alert("Note created!");
         else alert("Failed to make note.");
       })
       .catch((err) => alert(err));
-
   };
 
   return (
