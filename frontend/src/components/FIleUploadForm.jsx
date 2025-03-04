@@ -7,35 +7,37 @@ function FileUploadForm() {
   const [topic, setTopic] = useState("");
   const [file, setFile] = useState(null);
 
-  const createTopic = (e) => {
-    setLoading(true)
+  const createFlashcards = (e) => {
+    setLoading(true);
     e.preventDefault();
-    api
-      .post("/api/topics/", { topic })
-      .then((res) => {
-        if (res.status === 201) alert("Note created!");
-        else alert("Failed to make note.");
-        createFlashcards();
-      })
-      .catch((err) => alert(err));
-  };
+    if (!file) {
+      alert("Please upload a file.");
+      setLoading(false);
+      return;
+    }
 
-  const createFlashcards = (topicId) => {
     const formData = new FormData();
+    formData.append("topic", topic);
     formData.append("file", file);
+
     api
-      .post("/api/createflashcards/${topicId}/", formData)
+      .post("/api/topics/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         if (res.status === 201) alert("Note created!");
         else alert("Failed to make note.");
       })
-      .catch((err) => alert(err));
+      .catch((err) => alert(err))
+      .finally(() => setLoading(false));
   };
 
   return (
     <form
       className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
-      onSubmit={createTopic}
+      onSubmit={createFlashcards}
     >
       <h2 className="text-xl font-bold mb-4 text-blue-500">
         Submit Flashcard Content
