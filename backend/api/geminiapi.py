@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 import os
 import PyPDF2
 import json
+from .models import Flashcard
+from .serializers import FlashcardSerializer
 
 # Load environment variables
 load_dotenv()
@@ -103,3 +105,32 @@ def create_flashcards(file_path, mime_type):
 
     except Exception as e:
         raise ValueError(f"Something went wrong: {str(e)}")
+
+
+def handle_flashcard_creation(uploaded_file, topic):
+    mime_type = uploaded_file.content_type
+
+    try:
+        file_path = processfile(uploaded_file)
+        flashcards = create_flashcards(file_path, mime_type)
+
+        created_flashcards = []
+        for flashcard in flashcards:
+            fcard = Flashcard.objects.create(
+                user=request.user,
+                topic=topic,
+                question=flashcard["question"],
+                answer=flashcard["answer"],
+            )
+            created_flashcards.append(fcard)
+
+    except Exception as e:
+        # Clean up the temporary file in case of errors
+        if file_path and os.path.exists(file_path):
+            os.remove(file_path)
+            return Response(
+                {"error": f"Processing failed: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+    pass

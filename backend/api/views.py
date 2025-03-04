@@ -7,7 +7,7 @@ from rest_framework.parsers import MultiPartParser
 from .serializers import UserSerializer, TopicSerializer, FlashcardSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
-from .geminiapi import create_flashcards, processfile
+from .geminiapi import create_flashcards, processfile, handle_flashcard_creation
 import os
 
 
@@ -28,7 +28,13 @@ class TopicListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         if serializer.is_valid():
-            serializer.save(user=self.request.user)
+            topic = serializer.save(user=self.request.user)
+            uploaded_file = self.request.data.get("file")
+            if not uploaded_file:
+                return Response(
+                {"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST
+            )
+            handle_flashcard_creation(uploaded_file,topic)
         else:
             print(serializer.errors)
 
@@ -45,6 +51,7 @@ class TopicDelete(generics.DestroyAPIView):
 class FlashcardListCreate(generics.ListCreateAPIView):
     serializer_class = FlashcardSerializer
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser]
 
     def get_queryset(self):
         user = self.request.user
@@ -116,19 +123,12 @@ class CreateFlashcards(APIView):
                 {"error": f"Topic with id {topic_id} does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
             )
-        except Exception as e:
-            # Clean up the temporary file in case of errors
-            if file_path and os.path.exists(file_path):
-                os.remove(file_path)
-                return Response(
-                    {"error": f"Processing failed: {str(e)}"},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
+        
 
 
 class FlashcardListByTopic(APIView):
     def get(self, request, topic_id):
-        topic = get_object_or_404(Topic, id=topic_id)
+        topic = get_object_or_404(Topic, id=topic_id)>
         flashcards = Flashcard.objects.filter(topic=topic)
         serializer = FlashcardSerializer(flashcards, many=True)
         return Response(serializer.data)
