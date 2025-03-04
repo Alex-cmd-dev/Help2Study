@@ -5,7 +5,7 @@ function NavBar() {
       data-theme="dracula"
     >
       <div className="flex-1">
-        <a className="btn  text-2xl  text-slate-200 ">Flashcard App</a>
+        <a className="btn  text-2xl  text-slate-200 ">Help2Study</a>
       </div>
       <div className="  flex-none">
         <ul className="menu menu-horizontal px-1">

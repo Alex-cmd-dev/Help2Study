@@ -75,14 +75,12 @@ class CreateFlashcards(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, topic_id):
-        uploaded_file = request.FILES.get("file")
+        uploaded_file = request.data.get("file")
         if not uploaded_file:
             return Response(
                 {"error": "No file uploaded"}, status=status.HTTP_400_BAD_REQUEST
             )
         mime_type = uploaded_file.content_type
-        file_path = None
-
         try:
             topic = Topic.objects.get(id=topic_id)
             file_path = processfile(uploaded_file)
