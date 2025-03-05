@@ -17,7 +17,7 @@ function FileUploadForm() {
     }
 
     const formData = new FormData();
-    formData.append("topic", topic);
+    formData.append("name", topic);
     formData.append("file", file);
 
     api

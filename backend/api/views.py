@@ -26,15 +26,13 @@ class TopicListCreate(generics.ListCreateAPIView):
         return Topic.objects.filter(user=user)
 
     def perform_create(self, serializer):
-        if serializer.is_valid():
+            serializer.is_valid(raise_exception=True)
             user = self.request.user
             topic = serializer.save(user=user)
             uploaded_file = self.request.data.get("file")
             if not uploaded_file:
                 raise serializers.ValidationError({"error": "No file uploaded"})
             handle_flashcard_creation(uploaded_file, topic, user)
-        else:
-            print(serializer.errors)
 
 
 class TopicDelete(generics.DestroyAPIView):
