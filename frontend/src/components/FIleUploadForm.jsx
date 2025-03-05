@@ -6,6 +6,8 @@ function FileUploadForm() {
   const [loading, setLoading] = useState(false);
   const [topic, setTopic] = useState("");
   const [file, setFile] = useState(null);
+  const [apicall, setAPIcall] = useState(false);
+  const navigate = useNavigate();
 
   const createFlashcards = (e) => {
     setLoading(true);
@@ -19,6 +21,7 @@ function FileUploadForm() {
     const formData = new FormData();
     formData.append("name", topic);
     formData.append("file", file);
+    setAPIcall(false);
 
     api
       .post("/api/topics/", formData, {
@@ -27,12 +30,26 @@ function FileUploadForm() {
         },
       })
       .then((res) => {
-        if (res.status === 201) alert("Note created!");
-        else alert("Failed to make note.");
+        if (res.status === 201) {
+          alert("Flashcards created");
+          setAPIcall(true);
+        } else alert("Failed to make flashcards.");
       })
       .catch((err) => alert(err))
       .finally(() => setLoading(false));
   };
+  const viewFlashcards = (e) => {
+    navigate("/flashcards");
+  };
+  if (apicall) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <button className="btn btn-wid bg-blue-950" onClick={viewFlashcards}>
+          View Flashcards
+        </button>
+      </div>
+    );
+  }
 
   if (loading) {
     return (

@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import api from "../api";
 import NavBar from "../components/NavBar";
 import FileUploadForm from "../components/FIleUploadForm";
 
