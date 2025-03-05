@@ -34,12 +34,22 @@ function FileUploadForm() {
       .finally(() => setLoading(false));
   };
 
+  if (loading) {
+    return (
+      <div
+        className="flex justify-center items-center min-h-screen"
+        data-theme="night"
+      >
+        <span className="loading loading-spinner loading-lg"></span>
+      </div>
+    );
+  }
   return (
     <form
       className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
       onSubmit={createFlashcards}
     >
-      <h2 className="text-xl font-bold mb-4 text-blue-500">
+      <h2 className="text-xl font-bold mb-4 text-blue-950">
         Submit Flashcard Content
       </h2>
       <div className="mb-4">
@@ -66,21 +76,22 @@ function FileUploadForm() {
         >
           Upload File
         </label>
-        <input
-          id="file-upload"
-          type="file"
-          value={file}
-          onChange={(e) => setFile(e.target.files[0])}
-          className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
-          accept=".pdf,.txt,.docx"
-        />
-        <p className="mt-1 text-xs text-gray-500">
-          Accepted file types: PDF, TXT, DOCX
-        </p>
+        <fieldset className="fieldset  ">
+          <input
+            id="file-upload"
+            type="file"
+            className="file-input  text-white"
+            onChange={(e) => setFile(e.target.files[0])}
+            accept=".pdf,.txt,.docx"
+          />
+          <label className="fieldset-label text-black">
+            Accepted file types: PDF, TXT, DOCX
+          </label>
+        </fieldset>
       </div>
       <button
         type="submit"
-        className="w-full py-2 px-4 rounded-md text-white font-medium bg-blue-600 hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+        className="w-full py-2 px-4 rounded-md text-white font-medium bg-blue-950 hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
       >
         Submit
       </button>
