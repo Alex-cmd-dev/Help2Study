@@ -5,13 +5,13 @@ from dotenv import load_dotenv
 import os
 import PyPDF2
 import json
+import logging
 from .models import Flashcard
 from .serializers import FlashcardSerializer
-from rest_framework.response import Response
-from rest_framework import status
 
-# Load environment variables
+
 load_dotenv()
+logger = logging.getLogger(__name__)
 
 # Configure the API
 client = genai.Client(api_key=os.getenv("API_KEY"))
@@ -62,15 +62,23 @@ def read_text_file(file_path):
 # Function to generate flashcards from text
 def text_2flashcards(text):
     try:
+        logger.info(f"Input text for flashcards: {text}") #logs text from file
         prompt = (
-            f" Create flashcards in question and answer format based on the following content {text}"
-            """Use this JSON schema:
-               Flashcards = {'question': str, 'answer': str}
-               Return: list[Flashcards]"""
+            f"Create flashcards in JSON format based on the following content: {text}\n"
+            "Format strictly as a JSON array of objects with 'question' and 'answer' keys.\n"
+            "Example: [{'question': 'What is...?', 'answer': 'This is...'}, ...]\n"
+            "Ensure valid JSON formatting."
         )
-        response = client.models.generate_content(
-            model="gemini-2.0-flash", contents=prompt
-        )
+        try:
+            response = client.models.generate_content(
+                model="gemini-2.0-flash", contents=prompt
+            )
+        except Exception as api_error:
+            logger.error(f"API call failed: {api_error}")
+            raise ValueError(f"Gemini API call failed: {api_error}")
+        
+        logger.info(f"Raw response: {response.text}") #log response from api
+
         if response.text.startswith("```json"):
             text = response.text[7:]
         else:
