@@ -39,6 +39,7 @@ function FileUploadForm() {
       .finally(() => setLoading(false));
   };
   const viewFlashcards = (e) => {
+    e.preventDefault();
     navigate("/flashcards");
   };
   if (apicall) {

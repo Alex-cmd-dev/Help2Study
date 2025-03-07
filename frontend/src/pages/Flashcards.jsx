@@ -1,4 +1,5 @@
 import NavBar from "../components/NavBar";
+import ListofTopics from "../components/ListofTopics";
 
 function Flashcards() {
   return (
@@ -7,6 +8,8 @@ function Flashcards() {
       data-theme="night"
     >
       <NavBar></NavBar>
+      <ListofTopics></ListofTopics>
+
     </div>
   );
 }
