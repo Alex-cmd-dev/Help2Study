@@ -4,7 +4,7 @@ import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoutes";
-import Flashcards from "./pages/Flashcards";
+import Topics from "./pages/Topics";
 
 function Logout() {
   localStorage.clear();
@@ -29,10 +29,10 @@ function App() {
           }
         />
         <Route
-          path="/flashcards"
+          path="/topics"
           element={
             <ProtectedRoute>
-              <Flashcards></Flashcards>
+              <Topics></Topics>
             </ProtectedRoute>
           }
         />
