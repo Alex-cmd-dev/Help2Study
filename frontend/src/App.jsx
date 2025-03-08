@@ -5,6 +5,7 @@ import NotFound from "./pages/NotFound";
 import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Topics from "./pages/Topics";
+import Flashcards from "./pages/Flashcards";
 
 function Logout() {
   localStorage.clear();
@@ -33,6 +34,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Topics></Topics>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="topics/flashcards/:id"
+          element={
+            <ProtectedRoute>
+              <Flashcards></Flashcards>
             </ProtectedRoute>
           }
         />
