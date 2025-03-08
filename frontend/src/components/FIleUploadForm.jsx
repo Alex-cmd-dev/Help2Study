@@ -40,7 +40,7 @@ function FileUploadForm() {
   };
   const viewFlashcards = (e) => {
     e.preventDefault();
-    navigate("/flashcards");
+    navigate("/topics");
   };
   if (apicall) {
     return (
