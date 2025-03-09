@@ -75,7 +75,7 @@ class FlashcardDelete(generics.DestroyAPIView):
 
 class FlashcardListByTopic(APIView):
     def get(self, request, topic_id):
-        topic = get_object_or_404(Topic, id=topic_id)
+        topic = get_object_or_404(Topic, id=topic_id, user=self.request.user)
         flashcards = Flashcard.objects.filter(topic=topic)
         serializer = FlashcardSerializer(flashcards, many=True)
         return Response(serializer.data)
