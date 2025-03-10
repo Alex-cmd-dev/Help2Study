@@ -6,11 +6,7 @@ import Home from "./pages/Home";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Topics from "./pages/Topics";
 import Flashcards from "./pages/Flashcards";
-
-function Logout() {
-  localStorage.clear();
-  return <Navigate to="/login" />;
-}
+import Logout from "./pages/Logout";
 
 function RegisterAndLogout() {
   localStorage.clear();
