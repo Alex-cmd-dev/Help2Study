@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from rest_framework import generics, status, serializers
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
+from rest_framework.views import APIView
 from .serializers import UserSerializer, TopicSerializer, FlashcardSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
