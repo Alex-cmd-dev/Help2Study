@@ -15,9 +15,10 @@ CONCEPTS: REST API, HTTP Methods, Class-Based Views, Authentication, CRUD
 RELATED: urls.py (routes to these views), models.py (database), serializers.py (validation)
 """
 
-from django.shortcuts import render, get_object_or_404
+import logging
+from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
-from rest_framework import generics, status, serializers
+from rest_framework import generics, serializers
 from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser
 from rest_framework.views import APIView
@@ -25,6 +26,30 @@ from .serializers import UserSerializer, TopicSerializer, FlashcardSerializer
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Topic, Flashcard
 from .geminiapi import handle_flashcard_creation
+
+# ============================================
+# LOGGING SETUP FOR PRESENTATION & DEBUGGING
+# ============================================
+# Logger for tracking request journey through the system
+#
+# WHY LOGGING IS IMPORTANT:
+# 1. DEBUGGING: Helps identify where errors occur in the request flow
+# 2. MONITORING: Track system behavior in production
+# 3. LEARNING: Visualize how data moves through the application
+# 4. PERFORMANCE: Measure how long operations take
+#
+# HOW TO USE:
+# - logger.info() for normal operations (what we use for presentations)
+# - logger.warning() for concerning but non-critical issues
+# - logger.error() for errors that need attention
+# - logger.debug() for detailed debugging info
+#
+# WHERE TO VIEW: When you run `python manage.py runserver`,
+# logs appear in the terminal with 🔵 markers for easy tracking
+#
+# FUTURE USE: In production, logs go to files or monitoring services
+# like AWS CloudWatch, DataDog, or Sentry for real-time alerts
+logger = logging.getLogger('api')
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -68,7 +93,10 @@ class TopicListCreate(generics.ListCreateAPIView):
         This ensures users can only see their own topics (security!)
         """
         user = self.request.user
-        return Topic.objects.filter(user=user)
+        logger.info(f"REQUEST JOURNEY - STEP 3: Fetching topics for user: {user.username}")
+        queryset = Topic.objects.filter(user=user)
+        logger.info(f"DATABASE: Found {queryset.count()} topics")
+        return queryset
 
     def perform_create(self, serializer):
         """
@@ -83,23 +111,46 @@ class TopicListCreate(generics.ListCreateAPIView):
         5. AI creates flashcards (happens in geminiapi.py)
 
         CONCEPTS: File handling, Data validation, External API integration
+
+        LOGGING NOTE: Each logger.info() statement below tracks a different
+        stage of the request. This is invaluable for:
+        - Presentations: Show the complete data flow to an audience
+        - Debugging: Quickly identify which step failed
+        - Learning: Understand the order of operations
+        - Performance: Add timestamps to measure bottlenecks
         """
+        # Visual separator makes logs easier to read
+        logger.info("=" * 60)
+        logger.info("REQUEST JOURNEY - STEP 3: POST request arrived at TopicListCreate view")
+
         # Validate the data structure
         serializer.is_valid(raise_exception=True)
+        logger.info("VALIDATION: Data structure validated successfully")
 
         user = self.request.user
+        logger.info(f"AUTHENTICATION: User '{user.username}' authenticated via JWT")
 
         # Save topic to database first (CREATE operation)
+        topic_name = serializer.validated_data.get('name')
+        logger.info(f"DATABASE - STEP 4: Creating new topic '{topic_name}'")
         topic = serializer.save(user=user)
+        logger.info(f"DATABASE: Topic created with ID={topic.id}")
 
         # Extract file from multipart form data
         uploaded_file = self.request.data.get("file")
         if not uploaded_file:
+            logger.error("ERROR: No file uploaded in request")
             raise serializers.ValidationError({"error": "No file uploaded"})
+
+        logger.info(f"FILE UPLOAD: Received file '{uploaded_file.name}' ({uploaded_file.content_type})")
 
         # 🔵 REQUEST JOURNEY - STEP 5: Send to AI for processing
         # This function extracts text and generates flashcards
+        logger.info("AI PROCESSING - STEP 5: Sending file to Gemini AI...")
         handle_flashcard_creation(uploaded_file, topic, user)
+        logger.info("AI PROCESSING: Flashcards generated successfully")
+        logger.info("RESPONSE - STEP 6: Sending JSON response back to frontend")
+        logger.info("=" * 60)
 
 
 class TopicDelete(generics.DestroyAPIView):

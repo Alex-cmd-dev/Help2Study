@@ -46,15 +46,21 @@ function FileUploadForm() {
    * CONCEPTS: Event Handling, FormData, Async Operations, HTTP POST
    */
   const createFlashcards = (e) => {
+    console.log('%c🔵 REQUEST JOURNEY - STEP 1: User Action', 'color: #9B59B6; font-weight: bold');
+    console.log('👤 User clicked "Create Flashcards" button');
+
     setLoading(true);             // Show loading spinner
     e.preventDefault();           // Prevent page refresh (default form behavior)
 
     // Validate file was selected
     if (!file) {
+      console.warn('⚠️ Validation failed: No file selected');
       alert("Please upload a file.");
       setLoading(false);
       return;
     }
+
+    console.log('📝 Form data collected:', { topic, fileName: file.name, fileType: file.type });
 
     /**
      * FormData - For file uploads
@@ -66,6 +72,8 @@ function FileUploadForm() {
     formData.append("name", topic);   // Add topic name
     formData.append("file", file);    // Add selected file
     setAPIcall(false);
+
+    console.log('📦 FormData prepared for upload');
 
     /**
      * 🔵 REQUEST JOURNEY - STEP 2: Making the API call
@@ -82,14 +90,26 @@ function FileUploadForm() {
         },
       })
       .then((res) => {
-        // 🔵 REQUEST JOURNEY - STEP 7: Response received!
+        // 🔵 REQUEST JOURNEY - STEP 8: UI Update
+        console.log('%c🔵 REQUEST JOURNEY - STEP 8: Updating UI', 'color: #F39C12; font-weight: bold');
         if (res.status === 201) {              // 201 = Created (success)
+          console.log('✅ Flashcards created successfully!');
+          console.log('🔄 Triggering React state update...');
           alert("Flashcards created");
           setAPIcall(true);                    // Triggers UI update to show "View" button
-        } else alert("Failed to make flashcards.");
+        } else {
+          console.warn('⚠️ Unexpected status:', res.status);
+          alert("Failed to make flashcards.");
+        }
       })
-      .catch((err) => alert(err))              // Handle any errors
-      .finally(() => setLoading(false));       // Hide loading spinner
+      .catch((err) => {
+        console.error('❌ Error creating flashcards:', err);
+        alert(err);
+      })
+      .finally(() => {
+        setLoading(false);
+        console.log('🏁 Request journey complete');
+      });
   };
   const viewFlashcards = (e) => {
     e.preventDefault();

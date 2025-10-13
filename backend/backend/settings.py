@@ -148,3 +148,115 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWS_CREDENTIALS = True
+
+# ============================================
+# LOGGING CONFIGURATION FOR PRESENTATION MODE
+# ============================================
+# Tracks the complete request journey through the system
+# Great for demos and understanding data flow!
+#
+# HOW TO USE:
+# - Run: python manage.py runserver
+# - Logs appear in terminal with 🔵 markers
+# - Upload a file and watch the complete journey!
+#
+# WHAT THIS CONFIGURATION DOES:
+# 1. FORMATTERS: Define how log messages look
+#    - 'verbose': Shows timestamp, level, module name
+#    - 'simple': Just level and message
+#    - 'journey': Special format with 🔵 emoji for request tracking
+#
+# 2. HANDLERS: Define where logs go
+#    - 'console': Prints to terminal (stdout)
+#    - 'journey_console': Special handler for request journey logs
+#
+# 3. LOGGERS: Configure specific logging channels
+#    - 'api': Your custom app logs (request journey)
+#    - 'django.request': Django's built-in request logs
+#    - 'django.db.backends': Database query logs
+#
+# CUSTOMIZATION IDEAS FOR FUTURE:
+# - Add 'file' handler to save logs to a file
+# - Add 'email' handler to send error alerts
+# - Add 'syslog' handler for centralized logging
+# - Set 'django.db.backends' to DEBUG to see SQL queries
+# - Add performance timing to track slow operations
+#
+# PRODUCTION TIP:
+# In production, you'd send logs to services like:
+# - AWS CloudWatch
+# - DataDog
+# - Sentry
+# - Loggly
+# Instead of just printing to console
+# ============================================
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,  # Keep Django's default loggers
+
+    # FORMATTERS: Define how log messages are formatted
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} | {asctime} | {module} | {message}',
+            'style': '{',  # Use {variable} style (not % or $)
+        },
+        'simple': {
+            'format': '{levelname} | {message}',
+            'style': '{',
+        },
+        'journey': {
+            '()': 'django.utils.log.ServerFormatter',
+            'format': '🔵 {message}',  # 🔵 emoji makes logs easy to spot!
+            'style': '{',
+        },
+    },
+
+    # HANDLERS: Define where logs go (console, file, email, etc.)
+    'handlers': {
+        'console': {
+            'level': 'INFO',  # Only log INFO and above (INFO, WARNING, ERROR, CRITICAL)
+            'class': 'logging.StreamHandler',  # Print to stdout
+            'formatter': 'verbose',
+        },
+        'journey_console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'journey',  # Use the 🔵 emoji format
+        },
+    },
+
+    # LOGGERS: Configure specific logging channels
+    'loggers': {
+        # Your custom app logger - tracks request journey
+        # Usage in code: logger = logging.getLogger('api')
+        'api': {
+            'handlers': ['journey_console'],  # Use the journey formatter
+            'level': 'INFO',
+            'propagate': False,  # Don't pass logs to parent loggers
+        },
+
+        # Django's built-in request logger
+        # Logs HTTP requests automatically
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+
+        # Database query logger
+        # Set level to 'DEBUG' to see all SQL queries Django generates
+        # Great for learning how the ORM works!
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'WARNING',  # Change to DEBUG to see SQL queries
+            'propagate': False,
+        },
+    },
+
+    # Root logger - catches all other logs
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+}
