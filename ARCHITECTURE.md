@@ -9,34 +9,20 @@ This document explains how Help2Study works under the hood, with diagrams showin
 ## System Overview
 
 ```mermaid
-graph TB
-    subgraph "Client Side - Browser"
-        A[User Interface<br/>React Components]
-        B[HTTP Client<br/>Axios]
-    end
+graph LR
+    A[User<br/>Browser] -->|1. Action| B[React<br/>Frontend]
+    B -->|2. HTTP Request| C[Django<br/>Backend]
+    C -->|3. Save/Query| D[(Database)]
+    C -->|4. Process| E[AI<br/>Gemini]
+    E -->|5. Result| C
+    C -->|6. JSON Response| B
+    B -->|7. Update UI| A
 
-    subgraph "Server Side - Django"
-        C[URL Router<br/>urls.py]
-        D[API Views<br/>views.py]
-        E[Serializers<br/>Data Conversion]
-        F[Models<br/>ORM]
-    end
-
-    subgraph "Data Layer"
-        G[(Database<br/>SQLite)]
-        H[External API<br/>Gemini AI]
-    end
-
-    A -->|User clicks| B
-    B -->|HTTP Request| C
-    C -->|Routes to| D
-    D -->|Validates data| E
-    E -->|Query/Save| F
-    F -->|SQL| G
-    D -->|Process file| H
-    H -->|AI response| D
-    D -->|JSON| B
-    B -->|Updates| A
+    style A fill:#87CEEB
+    style B fill:#90EE90
+    style C fill:#FFD700
+    style D fill:#DDA0DD
+    style E fill:#FFA07A
 ```
 
 ---
@@ -256,31 +242,31 @@ sequenceDiagram
 ## Request/Response Summary
 
 ```mermaid
-graph LR
-    A[User Clicks] -->|1. Event| B[React]
-    B -->|2. HTTP POST| C[Django]
-    C -->|3. Route| D[View]
-    D -->|4. Save| E[Database]
-    D -->|5. Process| F[AI]
-    F -->|6. Data| D
-    D -->|7. JSON| B
-    B -->|8. Update| A
+flowchart LR
+    A[1. User Action] --> B[2. React Event]
+    B --> C[3. HTTP Request]
+    C --> D[4. Django View]
+    D --> E[5. Database]
+    D --> F[6. AI Process]
+    F --> G[7. Response]
+    G --> H[8. Update UI]
 
     style A fill:#87CEEB
     style B fill:#90EE90
-    style C fill:#FFD700
+    style D fill:#FFD700
     style E fill:#DDA0DD
+    style F fill:#FFA07A
 ```
 
 **The full cycle:**
-1. User action triggers event
-2. HTTP request sent
-3. Backend routes to handler
-4. Data saved to database
-5. External API called (optional)
-6. Response prepared
-7. JSON sent back
-8. UI updates
+1. User clicks button
+2. React captures event
+3. HTTP request sent to backend
+4. Django view processes request
+5. Data saved to database
+6. AI generates flashcards
+7. JSON response sent back
+8. React updates the UI
 
 ---
 

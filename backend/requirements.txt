@@ -1,16 +1,38 @@
-asgiref
-Django
-django-cors-headers
-djangorestframework
-djangorestframework-simplejwt
-PyJWT
-pytz
-sqlparse
-psycopg2-binary
-python-dotenv
-docx2txt
-google-genai
-python-magic
-PyPDF2
+# ============================================
+# Help2Study - Backend Dependencies
+# ============================================
+# This file lists all Python packages required for the Django backend
+# Install with: pip install -r requirements.txt
+#
+# WHY PIN VERSIONS?
+# Pinning ensures everyone runs the same versions, preventing
+# "works on my machine" issues and unexpected breaking changes.
+# ============================================
 
+# Core Django Framework
+Django==5.2.7                    # Web framework
+asgiref==3.8.1                   # ASGI server (async support)
+sqlparse==0.5.3                  # SQL query parsing
+pytz==2025.1                     # Timezone support
 
+# Django REST Framework - API toolkit
+djangorestframework==3.16.1      # REST API framework
+djangorestframework-simplejwt==5.5.1  # JWT authentication
+PyJWT==2.10.1                    # JSON Web Tokens
+
+# CORS - Allow frontend to connect
+django-cors-headers==4.7.0       # Handle cross-origin requests
+
+# Database
+psycopg2-binary==2.9.10          # PostgreSQL adapter (for production)
+
+# Environment Variables
+python-dotenv==1.0.1             # Load .env file variables
+
+# File Processing
+docx2txt==0.8                    # Extract text from DOCX files
+PyPDF2==3.0.1                    # Extract text from PDF files
+python-magic==0.4.27             # Detect file types
+
+# AI Integration
+google-genai==1.0.0              # Google Gemini AI API

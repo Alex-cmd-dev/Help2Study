@@ -1,5 +1,43 @@
+# ============================================
+# Help2Study - Git Ignore Rules
+# ============================================
+# WHY?
+# - Security: Don't commit secrets (.env files)
+# - Size: Don't bloat repo with dependencies
+# - Cleanliness: Ignore generated files
+# ============================================
+
+# Secrets - NEVER commit these!
 .env
-__pycache__
-.env
-/env
-.venv
+.env.local
+.env.*.local
+*.key
+*.pem
+
+# Python / Django
+__pycache__/
+*.py[cod]
+*.so
+venv/
+env/
+.venv/
+*.log
+db.sqlite3
+db.sqlite3-journal
+
+# Node / React
+node_modules/
+dist/
+build/
+npm-debug.log*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*~
+
+# Operating System
+.DS_Store
+Thumbs.db
+Desktop.ini
