@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import PropTypes from "prop-types";
 import { useNavigate, Link } from "react-router-dom";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -141,7 +142,7 @@ function Form({ route, method }) {
         {isLogin && (
           <CardFooter className="flex flex-col">
             <div className="text-center text-sm mt-2">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link
                 to="/register"
                 className="underline text-primary hover:text-primary/90 font-medium"
@@ -155,5 +156,10 @@ function Form({ route, method }) {
     </div>
   );
 }
+
+Form.propTypes = {
+  route: PropTypes.string.isRequired,
+  method: PropTypes.string.isRequired,
+};
 
 export default Form;

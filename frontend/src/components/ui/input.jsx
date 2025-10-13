@@ -1,4 +1,4 @@
-import * as React from "react"
+import PropTypes from "prop-types";
 
 import { cn } from "@/lib/utils"
 
@@ -20,5 +20,10 @@ function Input({
       {...props} />
   );
 }
+
+Input.propTypes = {
+  className: PropTypes.string,
+  type: PropTypes.string,
+};
 
 export { Input }

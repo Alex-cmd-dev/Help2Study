@@ -2,7 +2,7 @@
 
 import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, RotateCcw, ArrowLeft } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import api from "@/api";
@@ -15,7 +15,7 @@ function DisplayFlashcards() {
 
   useEffect(() => {
     getFlashcards();
-  }, [id]);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getFlashcards = () => {
     api
