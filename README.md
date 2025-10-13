@@ -1,254 +1,267 @@
-# Flashcards - AI-Powered Study Tool
+# Help2Study - AI Flashcard Generator
 
-A full-stack application that uses AI (Google Gemini) to automatically generate flashcards from uploaded documents (PDF, DOCX, TXT). Built with React, Django, and the Gemini API.
+A full-stack application that uses AI to automatically generate flashcards from your documents. Upload a PDF, DOCX, or TXT file and let Google Gemini create study materials for you.
+
+Built with React, Django, and modern web technologies to demonstrate real-world full-stack development.
 
 ## Features
 
-- Upload documents (PDF, DOCX, or TXT files)
-- AI-powered flashcard generation using Google Gemini
-- Organize flashcards by topics
-- Interactive flashcard viewer with flip animation
-- User authentication with JWT tokens
-- Responsive design with Tailwind CSS
+- Upload and process documents (PDF, DOCX, TXT)
+- AI-powered flashcard generation
+- User authentication
+- Organize by topics
+- Interactive flashcard viewer
+
+---
+
+## Understanding the Architecture
+
+### The Restaurant Analogy 🍽️
+
+```
+┌──────────────┐         ┌──────────────┐         ┌──────────────┐
+│ Dining Area  │  ←────→ │   Kitchen    │  ←────→ │    Pantry    │
+│  (Frontend)  │         │  (Backend)   │         │  (Database)  │
+│              │         │              │         │              │
+│   React      │         │   Django     │         │   SQLite     │
+│ What you see │         │ The logic    │         │ Stored data  │
+└──────────────┘         └──────────────┘         └──────────────┘
+```
+
+**Frontend:** What users see and interact with (the dining area)
+**Backend:** Where the logic happens (the kitchen)
+**Database:** Where data is stored permanently (the pantry)
+**API:** How they talk to each other (the order system)
+
+---
+
+## How a Request Travels Through the System
+
+When you upload a document, here's what happens:
+
+**1. User Action (Frontend)**
+```
+You click "Create Flashcards" → React captures the event
+```
+The UI responds to your click using event handling.
+
+**2. The Request (API Call)**
+```
+Browser sends HTTP POST → Travels to backend
+```
+An HTTP request with your file is sent to an endpoint like `/api/flashcards/`
+
+**3. Backend Receives (Routing)**
+```
+Django receives request → Routes to the correct view
+```
+The server matches the URL and directs it to the right handler.
+
+**4. Processing (Database + AI)**
+```
+View validates → Saves to database → Processes with AI
+```
+Django's ORM saves your data, then Gemini AI generates flashcards.
+
+**5. Response Sent Back**
+```
+Backend sends JSON response → Status code indicates success
+```
+The server responds with a status code (like 201 Created) and data.
+
+**6. UI Updates**
+```
+Frontend receives response → Updates the page
+```
+React's state management triggers a re-render to show your new flashcards.
+
+📚 **See [ARCHITECTURE.md](ARCHITECTURE.md) for detailed diagrams and code references**
+
+---
 
 ## Tech Stack
 
-**Frontend:**
-- React 18
-- Vite
-- React Router
-- Tailwind CSS 4.0
-- Axios
-- shadcn/ui components
+### Frontend (Client-Side)
+- React 18 - UI components
+- Vite - Fast build tool
+- Tailwind CSS - Styling
+- Axios - API requests
 
-**Backend:**
-- Django 5.1
-- Django REST Framework
-- Google Gemini AI API
-- JWT Authentication
-- SQLite database
+### Backend (Server-Side)
+- Django 5.1 - Web framework
+- Django REST Framework - API toolkit
+- JWT - Authentication
+- SQLite - Database
+- Google Gemini - AI processing
 
-## Prerequisites
+---
 
-Before you begin, ensure you have the following installed:
-- Python 3.8+ (for Django backend)
-- Node.js 16+ and npm (for React frontend)
-- Make (optional, for using Makefile commands)
+## Quick Start
 
-## Getting Started
+### Prerequisites
+- Python 3.8+
+- Node.js 16+
+- Git
 
-### 1. Clone the Repository
+### Setup in 3 Steps
 
+**1. Clone and configure**
 ```bash
 git clone <repository-url>
 cd Flashcards
-```
-
-### 2. Set Up Environment Variables
-
-Copy the `.env.example` file to `.env` and fill in your actual values:
-
-```bash
 cp .env.example .env
+# Edit .env and add your Gemini API key
 ```
 
-Edit the `.env` file and add your Gemini API key:
-
-```env
-# Get your API key from: https://makersuite.google.com/app/apikey
-API_KEY=your_gemini_api_key_here
-
-# Backend API URL (default for local development)
-VITE_API_URL=http://localhost:8000
-```
-
-### 3. Install Dependencies
-
-#### Option A: Using Make (Recommended)
-
+**2. Install dependencies**
 ```bash
 make install
+# OR manually: pip install + npm install
 ```
 
-#### Option B: Manual Installation
-
-**Backend:**
-```bash
-cd backend
-python -m pip install -r requirements.txt
-cd ..
-```
-
-**Frontend:**
-```bash
-cd frontend
-npm install
-cd ..
-```
-
-### 4. Run Database Migrations
-
+**3. Run migrations and start**
 ```bash
 make migrate
-# OR
-cd backend && python manage.py migrate
-```
-
-### 5. Start the Development Servers
-
-#### Option A: Using Make (Recommended)
-
-Start both servers simultaneously:
-```bash
 make dev
 ```
 
-Start servers individually:
-```bash
-make dev-backend  # Start Django on http://localhost:8000
-make dev-frontend # Start Vite on http://localhost:5173
-```
+Visit http://localhost:5173 to use the app!
 
-#### Option B: Manual Start
-
-**Terminal 1 - Backend:**
-```bash
-cd backend
-python manage.py runserver
-```
-
-**Terminal 2 - Frontend:**
-```bash
-cd frontend
-npm run dev
-```
-
-The application will be available at:
-- Frontend: http://localhost:5173
-- Backend API: http://localhost:8000
-
-## Available Make Commands
-
-```bash
-make help            # Show all available commands
-make install         # Install all dependencies
-make install-backend # Install Python dependencies only
-make install-frontend # Install Node.js dependencies only
-make setup           # Complete setup (install + migrate)
-make dev             # Start both dev servers
-make dev-backend     # Start Django server only
-make dev-frontend    # Start Vite server only
-make migrate         # Run Django migrations
-make lint            # Run linting checks
-make test            # Run backend tests
-make clean           # Clean temporary files and caches
-```
+---
 
 ## Project Structure
 
 ```
-Flashcards/
-├── backend/                 # Django backend
-│   ├── api/                # Main API app
-│   │   ├── models.py       # Database models
-│   │   ├── views.py        # API views
-│   │   ├── serializers.py  # DRF serializers
-│   │   ├── geminiapi.py    # Gemini AI integration
-│   │   └── urls.py         # API routes
-│   ├── backend/            # Django settings
-│   │   ├── settings.py     # Project settings
-│   │   └── urls.py         # Main URL configuration
-│   ├── manage.py           # Django management script
-│   └── requirements.txt    # Python dependencies
-├── frontend/               # React frontend
-│   ├── src/
-│   │   ├── components/     # React components
-│   │   ├── pages/          # Page components
-│   │   ├── api.js          # Axios configuration
-│   │   └── main.jsx        # Entry point
-│   ├── package.json        # Node dependencies
-│   └── vite.config.js      # Vite configuration
-├── .env.example            # Environment variables template
-├── .gitignore              # Git ignore rules
-├── Makefile                # Make commands for easy setup
-└── README.md               # This file
+help2study/
+├── backend/                    # Django (Server)
+│   ├── api/
+│   │   ├── models.py          # Database structure
+│   │   ├── views.py           # Request handlers
+│   │   ├── serializers.py     # Data conversion
+│   │   ├── urls.py            # API routing
+│   │   └── geminiapi.py       # AI integration
+│   └── backend/
+│       └── settings.py        # Configuration
+│
+├── frontend/                   # React (Client)
+│   └── src/
+│       ├── components/        # UI components
+│       ├── pages/             # Page views
+│       └── api.js             # HTTP client
+│
+├── ARCHITECTURE.md            # System design details
+├── CONCEPTS_GUIDE.md          # Technical glossary
+└── README.md                  # This file
 ```
 
-## Usage
-
-1. **Register/Login**: Create an account or log in
-2. **Upload Document**: Go to the home page and upload a PDF, DOCX, or TXT file
-3. **Enter Topic**: Provide a topic name for organizing your flashcards
-4. **Generate**: The AI will automatically extract content and generate flashcards
-5. **Study**: Navigate to Topics to view and study your flashcards
+---
 
 ## API Endpoints
 
-### Authentication
-- `POST /api/user/register/` - Register new user
-- `POST /api/token/` - Login (get JWT tokens)
-- `POST /api/token/refresh/` - Refresh access token
+REST API following standard HTTP methods:
 
-### Flashcards
-- `GET /api/topics/` - Get all topics
-- `POST /api/flashcards/` - Upload file and create flashcards
-- `GET /api/flashcards/<topic_id>/` - Get flashcards for a topic
-- `DELETE /api/topics/<topic_id>/delete/` - Delete a topic
+**Authentication**
+- `POST /api/user/register/` - Create account
+- `POST /api/token/` - Login
 
-## Linting
+**Flashcards (CRUD)**
+- `GET /api/topics/` - List topics
+- `POST /api/flashcards/` - Create flashcards
+- `GET /api/flashcards/<id>/` - Get flashcards
+- `DELETE /api/topics/<id>/` - Delete topic
 
-The project includes ESLint configuration for the frontend. Run linting checks:
+---
+
+## Customizing This Project
+
+Use Help2Study as a starting point for your own ideas:
+
+**Replace the AI logic** → Change `geminiapi.py` to your own processing
+**Modify the data model** → Edit `models.py` for different data
+**Update the UI** → Customize components with Tailwind
+**Add features** → Search, real-time updates, exports, etc.
+
+---
+
+## Make Commands
 
 ```bash
-make lint
-# OR
-cd frontend && npm run lint
+make install         # Install all dependencies
+make migrate         # Setup database
+make dev             # Start both servers
+make dev-backend     # Start Django only
+make dev-frontend    # Start React only
+make lint            # Check code quality
+make clean           # Clean temp files
 ```
 
-Currently, there is 1 minor warning about exporting both components and constants in the button.jsx file, which is intentional for the shadcn/ui component library.
+---
+
+## Key Concepts
+
+**Full-Stack Development:** Building frontend, backend, and database together
+**Client-Server Model:** Browser (client) requests data from server
+**Request/Response Cycle:** How clients and servers communicate
+**HTTP Methods:** GET (read), POST (create), DELETE (remove)
+**ORM:** Work with database using Python objects, not SQL
+**State Management:** How React tracks and updates data
+**Environment Variables:** Store secrets like API keys safely
+
+📚 **Full glossary with links: [CONCEPTS_GUIDE.md](CONCEPTS_GUIDE.md)**
+
+---
+
+## Learning Resources
+
+**This Project:**
+- [ARCHITECTURE.md](ARCHITECTURE.md) - Request flow diagrams
+- [CONCEPTS_GUIDE.md](CONCEPTS_GUIDE.md) - Technical terms explained
+
+**Official Docs:**
+- [React](https://react.dev) - Frontend
+- [Django](https://docs.djangoproject.com/) - Backend
+- [Django REST Framework](https://www.django-rest-framework.org/) - API
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+
+**Learning:**
+- [MDN Web Docs](https://developer.mozilla.org/) - Web fundamentals
+- [freeCodeCamp](https://www.freecodecamp.org/) - Free tutorials
+
+---
 
 ## Troubleshooting
 
-### Issue: "API_KEY not found"
-- Make sure you created the `.env` file in the root directory
-- Verify you added your Gemini API key to the `.env` file
-- Get an API key from: https://makersuite.google.com/app/apikey
+**Can't find API_KEY**
+→ Create `.env` file with your Gemini API key
 
-### Issue: "Cannot connect to backend"
-- Ensure the backend server is running on port 8000
-- Check that `VITE_API_URL` in your `.env` file is set to `http://localhost:8000`
-- Verify CORS settings in Django settings.py
+**Can't connect to backend**
+→ Make sure Django is running: `make dev-backend`
 
-### Issue: ESLint errors
-- Run `make install-frontend` or `cd frontend && npm install` to ensure all dependencies are installed
-- The project has been configured to handle most linting issues
+**Database errors**
+→ Run migrations: `make migrate`
 
-### Issue: Database errors
-- Run migrations: `make migrate` or `cd backend && python manage.py migrate`
-- Delete `db.sqlite3` and run migrations again if needed
+**Port already in use**
+→ Kill process: `lsof -ti:8000 | xargs kill -9`
+
+---
+
+## Development Tips
+
+**Think in systems:** Plan your data model and API endpoints first
+**Follow the request:** Use browser DevTools to trace data flow
+**Build incrementally:** Start simple, add features one at a time
+
+---
 
 ## Security Notes
 
-- The `.env` file contains sensitive information and is excluded from version control
-- Never commit your API keys or secrets to the repository
-- The Django SECRET_KEY in settings.py should be changed for production use
-- Set DEBUG=False and configure ALLOWED_HOSTS properly for production deployment
+- Never commit `.env` or API keys
+- Change Django `SECRET_KEY` for production
+- Set `DEBUG=False` in production
+- Use PostgreSQL instead of SQLite in production
 
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run linting checks
-5. Submit a pull request
-
-## License
-
-This project is for educational purposes.
+---
 
 ## Credits
 
-- Built with [Django](https://www.djangoproject.com/)
-- Frontend powered by [React](https://react.dev/) and [Vite](https://vitejs.dev/)
-- UI components from [shadcn/ui](https://ui.shadcn.com/)
-- AI powered by [Google Gemini](https://deepmind.google/technologies/gemini/)
+Built with [Django](https://www.djangoproject.com/), [React](https://react.dev/), [Vite](https://vitejs.dev/), [shadcn/ui](https://ui.shadcn.com/), and [Google Gemini](https://deepmind.google/technologies/gemini/)
