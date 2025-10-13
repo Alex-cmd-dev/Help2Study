@@ -88,7 +88,7 @@ React's state management triggers a re-render to show your new flashcards.
 - Axios - API requests
 
 ### Backend (Server-Side)
-- Django 5.1 - Web framework
+- Django 5.2.7 - Web framework
 - Django REST Framework - API toolkit
 - JWT - Authentication
 - SQLite - Database
@@ -166,9 +166,9 @@ REST API following standard HTTP methods:
 
 **Flashcards (CRUD)**
 - `GET /api/topics/` - List topics
-- `POST /api/flashcards/` - Create flashcards
-- `GET /api/flashcards/<id>/` - Get flashcards
-- `DELETE /api/topics/<id>/` - Delete topic
+- `POST /api/topics/` - Create topic + upload file to generate flashcards
+- `GET /api/flashcards/<topic_id>/` - Get flashcards for a topic
+- `DELETE /api/topic/delete/<id>` - Delete topic
 
 ---
 
