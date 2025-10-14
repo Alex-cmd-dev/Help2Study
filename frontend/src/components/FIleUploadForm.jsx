@@ -13,6 +13,11 @@
 import { useState } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2, Upload, Check } from "lucide-react";
 
 function FileUploadForm() {
   /**
@@ -130,23 +135,39 @@ function FileUploadForm() {
   // Show success screen after upload completes
   if (apicall) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <button className="btn btn-wid bg-blue-950" onClick={viewFlashcards}>
-          View Flashcards
-        </button>
-      </div>
+      <Card className="w-full max-w-md">
+        <CardContent className="pt-6 flex flex-col items-center gap-4">
+          <div className="rounded-full bg-primary/10 p-4">
+            <Check className="h-8 w-8 text-primary" />
+          </div>
+          <div className="text-center">
+            <h3 className="text-xl font-semibold mb-2">Flashcards Created!</h3>
+            <p className="text-muted-foreground mb-4">
+              Your flashcards are ready to study.
+            </p>
+          </div>
+          <Button onClick={viewFlashcards} className="w-full" size="lg">
+            View Flashcards
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
   // Show loading spinner while waiting for API response
   if (loading) {
     return (
-      <div
-        className="flex justify-center items-center min-h-screen"
-        data-theme="night"
-      >
-        <span className="loading loading-spinner loading-lg"></span>
-      </div>
+      <Card className="w-full max-w-md">
+        <CardContent className="pt-6 flex flex-col items-center gap-4">
+          <Loader2 className="h-12 w-12 animate-spin text-primary" />
+          <div className="text-center">
+            <h3 className="text-lg font-semibold">Creating Flashcards</h3>
+            <p className="text-sm text-muted-foreground mt-1">
+              Processing your document...
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -161,63 +182,53 @@ function FileUploadForm() {
    * - onSubmit={createFlashcards}: Calls handler when form submitted
    */
   return (
-    <form
-      className="w-full max-w-md mx-auto p-6 bg-white rounded-lg shadow-md"
-      onSubmit={createFlashcards}  // 🔵 Form submission triggers API call
-    >
-      <h2 className="text-xl font-bold mb-4 text-blue-950">
-        Submit Flashcard Content
-      </h2>
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle>Create Flashcards</CardTitle>
+        <CardDescription>
+          Upload a document to automatically generate flashcards
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <form onSubmit={createFlashcards} className="space-y-4">
+          {/* Topic input - controlled component */}
+          <div className="space-y-2">
+            <Label htmlFor="topic">Topic</Label>
+            <Input
+              id="topic"
+              type="text"
+              placeholder="e.g., Biology Chapter 1"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              required
+            />
+          </div>
 
-      {/* Topic input - controlled component */}
-      <div className="mb-4">
-        <label
-          htmlFor="topic"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Topic
-        </label>
-        <input
-          id="topic"
-          type="text"
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-black"
-          placeholder="Enter topic"
-          value={topic}                              // Controlled by state
-          onChange={(e) => setTopic(e.target.value)} // Updates state on change
-          required
-        />
-      </div>
+          {/* File input */}
+          <div className="space-y-2">
+            <Label htmlFor="file-upload">Upload Document</Label>
+            <div className="grid w-full items-center gap-1.5">
+              <Input
+                id="file-upload"
+                type="file"
+                onChange={(e) => setFile(e.target.files[0])}
+                accept=".pdf,.txt,.docx"
+                className="cursor-pointer"
+              />
+              <p className="text-xs text-muted-foreground">
+                Accepted formats: PDF, TXT, DOCX
+              </p>
+            </div>
+          </div>
 
-      {/* File input */}
-      <div className="mb-4">
-        <label
-          htmlFor="file-upload"
-          className="block text-sm font-medium text-gray-700 mb-1"
-        >
-          Upload File
-        </label>
-        <fieldset className="fieldset  ">
-          <input
-            id="file-upload"
-            type="file"
-            className="file-input  text-white"
-            onChange={(e) => setFile(e.target.files[0])}  // Store selected file
-            accept=".pdf,.txt,.docx"                       // Restrict file types
-          />
-          <label className="fieldset-label text-black">
-            Accepted file types: PDF, TXT, DOCX
-          </label>
-        </fieldset>
-      </div>
-
-      {/* Submit button */}
-      <button
-        type="submit"
-        className="w-full py-2 px-4 rounded-md text-white font-medium bg-blue-950 hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-      >
-        Submit
-      </button>
-    </form>
+          {/* Submit button */}
+          <Button type="submit" className="w-full" size="lg">
+            <Upload className="mr-2 h-4 w-4" />
+            Create Flashcards
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
   );
 }
 

@@ -8,74 +8,76 @@
 @plugin "tailwindcss-animate";
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  /* 🌌 SPACE THEME - Light Mode Base (Deep Space Blues/Purples) */
+  --background: oklch(0.12 0.05 280);  /* Deep space background */
+  --foreground: oklch(0.95 0.02 280);  /* Bright text with slight purple tint */
+  --card: oklch(0.18 0.06 285);  /* Card background - slightly lighter than bg */
+  --card-foreground: oklch(0.95 0.02 280);  /* Card text */
+  --popover: oklch(0.16 0.06 285);  /* Popover background */
+  --popover-foreground: oklch(0.95 0.02 280);  /* Popover text */
+  --primary: oklch(0.60 0.25 280);  /* Vibrant purple for primary actions */
+  --primary-foreground: oklch(0.98 0.01 280);  /* Text on primary */
+  --secondary: oklch(0.25 0.08 285);  /* Secondary elements */
+  --secondary-foreground: oklch(0.90 0.03 280);  /* Secondary text */
+  --muted: oklch(0.22 0.06 285);  /* Muted elements */
+  --muted-foreground: oklch(0.65 0.04 280);  /* Muted text */
+  --accent: oklch(0.55 0.22 250);  /* Accent blue */
+  --accent-foreground: oklch(0.98 0.01 250);  /* Accent text */
+  --destructive: oklch(0.55 0.22 15);  /* Red for destructive actions */
+  --destructive-foreground: oklch(0.98 0.01 15);  /* Destructive text */
+  --border: oklch(0.28 0.08 280);  /* Border color with purple tint */
+  --input: oklch(0.20 0.06 285);  /* Input background */
+  --ring: oklch(0.60 0.25 270);  /* Focus ring - bright purple */
+  --chart-1: oklch(0.65 0.25 280);  /* Chart colors - purple */
+  --chart-2: oklch(0.60 0.20 250);  /* Chart colors - blue */
+  --chart-3: oklch(0.70 0.18 220);  /* Chart colors - cyan */
+  --chart-4: oklch(0.65 0.22 310);  /* Chart colors - magenta */
+  --chart-5: oklch(0.60 0.20 290);  /* Chart colors - violet */
+  --radius: 0.75rem;  /* Slightly more rounded for modern feel */
+  --sidebar: oklch(0.15 0.06 285);
+  --sidebar-foreground: oklch(0.92 0.03 280);
+  --sidebar-primary: oklch(0.60 0.25 280);
+  --sidebar-primary-foreground: oklch(0.98 0.01 280);
+  --sidebar-accent: oklch(0.22 0.07 285);
+  --sidebar-accent-foreground: oklch(0.90 0.03 280);
+  --sidebar-border: oklch(0.25 0.07 285);
+  --sidebar-ring: oklch(0.60 0.25 270);
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.145 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.145 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.269 0 0);
-  --input: oklch(0.269 0 0);
-  --ring: oklch(0.439 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.269 0 0);
-  --sidebar-ring: oklch(0.439 0 0);
+  /* 🌌 SPACE THEME - Enhanced Dark Mode (Already dark, just refining) */
+  --background: oklch(0.10 0.06 280);  /* Even deeper space */
+  --foreground: oklch(0.96 0.02 280);  /* Brighter text */
+  --card: oklch(0.16 0.07 285);  /* Card slightly lighter */
+  --card-foreground: oklch(0.96 0.02 280);
+  --popover: oklch(0.14 0.07 285);
+  --popover-foreground: oklch(0.96 0.02 280);
+  --primary: oklch(0.65 0.28 280);  /* Brighter purple in dark mode */
+  --primary-foreground: oklch(0.98 0.01 280);
+  --secondary: oklch(0.22 0.08 285);
+  --secondary-foreground: oklch(0.92 0.03 280);
+  --muted: oklch(0.20 0.07 285);
+  --muted-foreground: oklch(0.60 0.05 280);
+  --accent: oklch(0.58 0.24 250);  /* Bright blue accent */
+  --accent-foreground: oklch(0.98 0.01 250);
+  --destructive: oklch(0.58 0.24 15);
+  --destructive-foreground: oklch(0.98 0.01 15);
+  --border: oklch(0.25 0.08 280);
+  --input: oklch(0.18 0.07 285);
+  --ring: oklch(0.65 0.28 270);  /* Glowing purple focus */
+  --chart-1: oklch(0.68 0.28 280);
+  --chart-2: oklch(0.63 0.22 250);
+  --chart-3: oklch(0.73 0.20 220);
+  --chart-4: oklch(0.68 0.24 310);
+  --chart-5: oklch(0.63 0.22 290);
+  --sidebar: oklch(0.13 0.07 285);
+  --sidebar-foreground: oklch(0.94 0.03 280);
+  --sidebar-primary: oklch(0.65 0.28 280);
+  --sidebar-primary-foreground: oklch(0.98 0.01 280);
+  --sidebar-accent: oklch(0.20 0.08 285);
+  --sidebar-accent-foreground: oklch(0.92 0.03 280);
+  --sidebar-border: oklch(0.22 0.08 285);
+  --sidebar-ring: oklch(0.65 0.28 270);
 }
 
 @theme inline {
@@ -123,5 +125,81 @@
   }
   body {
     @apply bg-background text-foreground;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  /* 🌌 SPACE BACKGROUND - Animated Starfield */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background:
+      radial-gradient(ellipse at top, oklch(0.20 0.10 280) 0%, transparent 50%),
+      radial-gradient(ellipse at bottom, oklch(0.18 0.12 250) 0%, transparent 50%),
+      oklch(0.10 0.06 280);
+    pointer-events: none;
+  }
+
+  /* Animated stars - small twinkling dots */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, white, transparent),
+      radial-gradient(1px 1px at 60% 70%, white, transparent),
+      radial-gradient(1px 1px at 50% 50%, white, transparent),
+      radial-gradient(1px 1px at 80% 10%, white, transparent),
+      radial-gradient(1px 1px at 90% 60%, white, transparent),
+      radial-gradient(1px 1px at 30% 80%, white, transparent),
+      radial-gradient(1px 1px at 70% 20%, white, transparent),
+      radial-gradient(1.5px 1.5px at 40% 40%, oklch(0.70 0.20 280), transparent),
+      radial-gradient(1.5px 1.5px at 85% 85%, oklch(0.70 0.20 250), transparent);
+    background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%, 200% 200%;
+    background-position: 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%, 0% 0%;
+    animation: twinkling 120s linear infinite;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  @keyframes twinkling {
+    0%, 100% {
+      opacity: 0.3;
+    }
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  /* Glowing effect on cards and interactive elements */
+  @layer components {
+    .card, [class*="Card"] {
+      box-shadow: 0 0 20px oklch(0.20 0.10 280 / 0.3);
+      transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    .card:hover, [class*="Card"]:hover {
+      box-shadow: 0 0 30px oklch(0.40 0.20 280 / 0.4), 0 0 60px oklch(0.30 0.15 250 / 0.2);
+      transform: translateY(-2px);
+    }
+
+    /* Glowing buttons */
+    button[class*="primary"], .btn-primary {
+      box-shadow: 0 0 20px oklch(0.50 0.20 280 / 0.3);
+      transition: all 0.3s ease;
+    }
+
+    button[class*="primary"]:hover, .btn-primary:hover {
+      box-shadow: 0 0 30px oklch(0.60 0.25 280 / 0.5), 0 0 50px oklch(0.50 0.20 280 / 0.3);
+    }
   }
 }
