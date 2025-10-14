@@ -3,13 +3,11 @@ import FlashcardTopics from "../components/ListofTopics";
 
 function Topics() {
   return (
-    <div
-      className="flex justify-center items-center min-h-screen"
-      data-theme="night"
-    >
-      <NavBar></NavBar>
-      <FlashcardTopics></FlashcardTopics>
-
+    <div className="min-h-screen bg-background">
+      <NavBar />
+      <div className="pt-20">
+        <FlashcardTopics />
+      </div>
     </div>
   );
 }

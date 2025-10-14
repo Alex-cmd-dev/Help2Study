@@ -47,13 +47,20 @@ function DisplayFlashcards() {
 
   // If no flashcards are loaded yet
   if (flashcards.length === 0) {
-    return <div className="container py-10">Loading...</div>;
+    return (
+      <div className="container mx-auto px-4 py-10">
+        <div className="flex flex-col items-center justify-center gap-4 py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p className="text-muted-foreground">Loading flashcards...</p>
+        </div>
+      </div>
+    );
   }
 
   const currentCard = flashcards[currentCardIndex];
 
   return (
-    <div className="container py-10 max-w-4xl mx-auto">
+    <div className="container mx-auto px-4 py-10 max-w-4xl">
       <div className="mb-6 flex items-center justify-between">
         <div>
           <Link
@@ -74,31 +81,31 @@ function DisplayFlashcards() {
 
       {/* Tailwind 4.0 optimized approach */}
       <div
-        className="w-full aspect-[3/2] max-w-2xl mx-auto mb-8 cursor-pointer relative"
+        className="w-full aspect-[3/2] max-w-2xl mx-auto mb-8 cursor-pointer relative group"
         onClick={handleFlipCard}
       >
         {/* Using absolute positioning and opacity for a smoother transition */}
         <Card
-          className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center p-8 text-center transition-opacity duration-300 ${
+          className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center p-8 text-center transition-all duration-300 hover:shadow-xl ${
             isFlipped ? "opacity-0 pointer-events-none" : "opacity-100"
           }`}
         >
-          <div className="text-sm text-muted-foreground mb-2">TERM</div>
-          <div className="text-2xl font-semibold">{currentCard.question}</div>
-          <div className="mt-6 text-sm text-muted-foreground">
-            Click to flip
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Term</div>
+          <div className="text-2xl font-semibold leading-relaxed">{currentCard.question}</div>
+          <div className="mt-8 text-sm text-muted-foreground flex items-center gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
+            <span>Click to reveal answer</span>
           </div>
         </Card>
 
         <Card
-          className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center p-8 text-center transition-opacity duration-300 bg-muted/20 ${
+          className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center p-8 text-center transition-all duration-300 bg-primary/5 hover:shadow-xl ${
             isFlipped ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
-          <div className="text-sm text-muted-foreground mb-2">DEFINITION</div>
-          <div className="text-xl">{currentCard.answer}</div>
-          <div className="mt-6 text-sm text-muted-foreground">
-            Click to flip back
+          <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">Definition</div>
+          <div className="text-xl leading-relaxed">{currentCard.answer}</div>
+          <div className="mt-8 text-sm text-muted-foreground flex items-center gap-2 opacity-70 group-hover:opacity-100 transition-opacity">
+            <span>Click to see term</span>
           </div>
         </Card>
       </div>

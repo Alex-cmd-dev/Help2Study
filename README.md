@@ -108,7 +108,7 @@ React's state management triggers a re-render to show your new flashcards.
 **1. Clone and configure**
 ```bash
 git clone <repository-url>
-cd Flashcards
+cd Help2Study
 cp .env.example .env
 # Edit .env and add your Gemini API key
 ```

@@ -54,29 +54,47 @@ function FlashcardTopics() {
   const sortedTopics = [...topics].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
 
   if (isLoading) {
-    return <div className="container py-10">Loading topics...</div>
+    return (
+      <div className="container mx-auto px-4 py-10">
+        <div className="flex flex-col items-center justify-center gap-4 py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p className="text-muted-foreground">Loading topics...</p>
+        </div>
+      </div>
+    )
   }
 
   if (error) {
-    return <div className="container py-10 text-red-500">{error}</div>
+    return (
+      <div className="container mx-auto px-4 py-10">
+        <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4">
+          <p className="text-destructive">{error}</p>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="container py-10">
+    <div className="container mx-auto px-4 py-10">
       <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">Flashcard Topics</h1>
         <p className="text-muted-foreground mt-2">Select a topic to view its flashcards</p>
       </div>
 
       {sortedTopics.length === 0 ? (
-        <p className="text-muted-foreground">No topics available. Create new Flashcard to get started.</p>
+        <Card className="p-8 text-center">
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-muted-foreground">No topics available yet.</p>
+            <p className="text-sm text-muted-foreground">Create your first flashcard set to get started!</p>
+          </div>
+        </Card>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {sortedTopics.map((topic) => (
-            <Link to={`/topics/flashcards/${topic.id}`} key={topic.id} className="block">
-              <Card className="h-full transition-all hover:shadow-md">
+            <Link to={`/topics/flashcards/${topic.id}`} key={topic.id} className="block group">
+              <Card className="h-full transition-all hover:shadow-lg hover:border-primary/50">
                 <CardHeader>
-                  <CardTitle>{topic.name}</CardTitle>
+                  <CardTitle className="group-hover:text-primary transition-colors">{topic.name}</CardTitle>
                   <CardDescription className="flex items-center gap-1 mt-2">
                     <CalendarIcon className="h-4 w-4" />
                     <span>
