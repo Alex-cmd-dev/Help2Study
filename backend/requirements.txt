@@ -24,7 +24,8 @@ PyJWT==2.10.1                    # JSON Web Tokens
 django-cors-headers==4.7.0       # Handle cross-origin requests
 
 # Database
-psycopg2-binary==2.9.10          # PostgreSQL adapter (for production)
+# Using SQLite (built into Python) for simplicity and portability
+# For production PostgreSQL, add: psycopg2-binary==2.9.10
 
 # Environment Variables
 python-dotenv==1.0.1             # Load .env file variables
@@ -32,7 +33,7 @@ python-dotenv==1.0.1             # Load .env file variables
 # File Processing
 docx2txt==0.8                    # Extract text from DOCX files
 PyPDF2==3.0.1                    # Extract text from PDF files
-python-magic==0.4.27             # Detect file types
+# python-magic removed for portability - use mimetypes (built-in) if needed
 
 # AI Integration
 google-genai==1.0.0              # Google Gemini AI API

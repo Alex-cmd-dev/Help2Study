@@ -91,7 +91,7 @@ React's state management triggers a re-render to show your new flashcards.
 - Django 5.2.7 - Web framework
 - Django REST Framework - API toolkit
 - JWT - Authentication
-- SQLite - Database
+- SQLite - Database (built-in, no installation needed)
 - Google Gemini - AI processing
 
 ---
@@ -103,7 +103,35 @@ React's state management triggers a re-render to show your new flashcards.
 - Node.js 16+
 - Git
 
-### Setup in 3 Steps
+### Automated Setup (Recommended)
+
+Run the setup script for your operating system:
+
+**macOS/Linux:**
+```bash
+./setup.sh
+```
+
+**Windows:**
+```batch
+setup.bat
+```
+
+The script will:
+- Check that Python and Node.js are installed
+- Create your `.env` file from `.env.example`
+- Install all dependencies
+- Set up the database
+- Guide you through any required steps
+
+Then start the app:
+```bash
+make dev
+```
+
+Visit http://localhost:5173 to use the app!
+
+### Manual Setup (Alternative)
 
 **1. Clone and configure**
 ```bash
@@ -124,8 +152,6 @@ make install
 make migrate
 make dev
 ```
-
-Visit http://localhost:5173 to use the app!
 
 ---
 
@@ -193,6 +219,15 @@ make dev-backend     # Start Django only
 make dev-frontend    # Start React only
 make lint            # Check code quality
 make clean           # Clean temp files
+```
+
+**Windows users without Make:** Use these commands instead:
+```batch
+# Start backend
+cd backend && python manage.py runserver
+
+# Start frontend (in a new terminal)
+cd frontend && npm run dev
 ```
 
 ---
