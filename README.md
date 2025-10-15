@@ -103,6 +103,8 @@ React's state management triggers a re-render to show your new flashcards.
 - Node.js 16+
 - Git
 
+**New to installation?** Check [INSTALLATION.md](INSTALLATION.md) for easy setup using package managers (Homebrew for macOS, Winget for Windows).
+
 ### Automated Setup (Recommended)
 
 Run the setup script for your operating system:
@@ -177,6 +179,7 @@ help2study/
 │
 ├── ARCHITECTURE.md            # System design details
 ├── CONCEPTS_GUIDE.md          # Technical glossary
+├── INSTALLATION.md            # Beginner installation guide
 └── README.md                  # This file
 ```
 
@@ -249,6 +252,7 @@ cd frontend && npm run dev
 ## Learning Resources
 
 **This Project:**
+- [INSTALLATION.md](INSTALLATION.md) - Fast setup using package managers
 - [ARCHITECTURE.md](ARCHITECTURE.md) - Request flow diagrams
 - [CONCEPTS_GUIDE.md](CONCEPTS_GUIDE.md) - Technical terms explained
 

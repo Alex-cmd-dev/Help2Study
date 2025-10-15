@@ -308,4 +308,4 @@ A glossary of all technical terms used in this project, organized by topic.
 
 **For system architecture and request flow diagrams, see [ARCHITECTURE.md](ARCHITECTURE.md)**
 
-**For setup instructions, see [README.md](README.md)**
+**For setup instructions, see [README.md](README.md) and [INSTALLATION.md](INSTALLATION.md)**
