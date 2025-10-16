@@ -348,6 +348,7 @@ Here's where to find each piece in the codebase:
 - Routing: `frontend/src/App.jsx`
 - File upload: `frontend/src/components/FileUploadForm.jsx`
 - API client: `frontend/src/api.js`
+- **API services:** `frontend/src/services/topicService.js`, `flashcardService.js`
 
 **Backend:**
 - Main settings: `backend/backend/settings.py`
@@ -356,6 +357,9 @@ Here's where to find each piece in the codebase:
 - Database models: `backend/api/models.py`
 - Data serialization: `backend/api/serializers.py`
 - AI integration: `backend/api/geminiapi.py`
+- **Utility functions:** `backend/api/utils/text_extractors.py`
+
+> **New in this version:** The codebase now includes a service layer for API calls (frontend) and utility functions for text extraction (backend). See [ADVANCED_PATTERNS.md](ADVANCED_PATTERNS.md) to learn why these were added and how to use them!
 
 ---
 

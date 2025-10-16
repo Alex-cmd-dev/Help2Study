@@ -167,7 +167,9 @@ help2study/
 │   │   ├── views.py           # Request handlers
 │   │   ├── serializers.py     # Data conversion
 │   │   ├── urls.py            # API routing
-│   │   └── geminiapi.py       # AI integration
+│   │   ├── geminiapi.py       # AI integration
+│   │   └── utils/             # Utility functions
+│   │       └── text_extractors.py
 │   └── backend/
 │       └── settings.py        # Configuration
 │
@@ -175,9 +177,13 @@ help2study/
 │   └── src/
 │       ├── components/        # UI components
 │       ├── pages/             # Page views
+│       ├── services/          # API service layer
+│       │   ├── topicService.js
+│       │   └── flashcardService.js
 │       └── api.js             # HTTP client
 │
 ├── ARCHITECTURE.md            # System design details
+├── ADVANCED_PATTERNS.md       # Professional patterns guide
 ├── CONCEPTS_GUIDE.md          # Technical glossary
 ├── INSTALLATION.md            # Beginner installation guide
 └── README.md                  # This file
@@ -255,6 +261,7 @@ cd frontend && npm run dev
 - [INSTALLATION.md](INSTALLATION.md) - Fast setup using package managers
 - [ARCHITECTURE.md](ARCHITECTURE.md) - Request flow diagrams
 - [CONCEPTS_GUIDE.md](CONCEPTS_GUIDE.md) - Technical terms explained
+- [ADVANCED_PATTERNS.md](ADVANCED_PATTERNS.md) - Professional patterns & refactoring guide
 
 **Official Docs:**
 - [React](https://react.dev) - Frontend

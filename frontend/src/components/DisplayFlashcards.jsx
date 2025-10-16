@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import api from "@/api";
+import flashcardService from "@/services/flashcardService";
 
 function DisplayFlashcards() {
   const { id } = useParams();
@@ -17,14 +17,15 @@ function DisplayFlashcards() {
     getFlashcards();
   }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const getFlashcards = () => {
-    api
-      .get(`/api/flashcards/${id}/`)
-      .then((res) => res.data)
-      .then((data) => {
-        setFlashcards(data);
-      })
-      .catch((err) => alert(err));
+  const getFlashcards = async () => {
+    try {
+      // Using flashcardService instead of calling API directly
+      const data = await flashcardService.getFlashcardsByTopic(id);
+      setFlashcards(data);
+    } catch (err) {
+      alert("Failed to load flashcards.");
+      console.error(err);
+    }
   };
 
   const handleNextCard = () => {

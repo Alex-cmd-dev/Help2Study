@@ -11,7 +11,7 @@
  */
 
 import { useState } from "react";
-import api from "../api";
+import topicService from "../services/topicService";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,7 +50,7 @@ function FileUploadForm() {
    *
    * CONCEPTS: Event Handling, FormData, Async Operations, HTTP POST
    */
-  const createFlashcards = (e) => {
+  const createFlashcards = async (e) => {
     console.log('%c🔵 REQUEST JOURNEY - STEP 1: User Action', 'color: #9B59B6; font-weight: bold');
     console.log('👤 User clicked "Create Flashcards" button');
 
@@ -83,38 +83,26 @@ function FileUploadForm() {
     /**
      * 🔵 REQUEST JOURNEY - STEP 2: Making the API call
      *
-     * api.post() sends HTTP POST request to backend
+     * Using topicService.createTopic() instead of calling API directly
      * This is ASYNCHRONOUS - doesn't block the UI
      *
-     * CONCEPTS: HTTP Request, Asynchronous JavaScript, Promises
+     * CONCEPTS: HTTP Request, Asynchronous JavaScript, Service Layer
      */
-    api
-      .post("/api/topics/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",  // Tell server it's a file
-        },
-      })
-      .then((res) => {
-        // 🔵 REQUEST JOURNEY - STEP 8: UI Update
-        console.log('%c🔵 REQUEST JOURNEY - STEP 8: Updating UI', 'color: #F39C12; font-weight: bold');
-        if (res.status === 201) {              // 201 = Created (success)
-          console.log('✅ Flashcards created successfully!');
-          console.log('🔄 Triggering React state update...');
-          alert("Flashcards created");
-          setAPIcall(true);                    // Triggers UI update to show "View" button
-        } else {
-          console.warn('⚠️ Unexpected status:', res.status);
-          alert("Failed to make flashcards.");
-        }
-      })
-      .catch((err) => {
-        console.error('❌ Error creating flashcards:', err);
-        alert(err);
-      })
-      .finally(() => {
-        setLoading(false);
-        console.log('🏁 Request journey complete');
-      });
+    try {
+      await topicService.createTopic(formData);
+      // 🔵 REQUEST JOURNEY - STEP 8: UI Update
+      console.log('%c🔵 REQUEST JOURNEY - STEP 8: Updating UI', 'color: #F39C12; font-weight: bold');
+      console.log('✅ Flashcards created successfully!');
+      console.log('🔄 Triggering React state update...');
+      alert("Flashcards created");
+      setAPIcall(true);  // Triggers UI update to show "View" button
+    } catch (err) {
+      console.error('❌ Error creating flashcards:', err);
+      alert("Failed to create flashcards. Please try again.");
+    } finally {
+      setLoading(false);
+      console.log('🏁 Request journey complete');
+    }
   };
   const viewFlashcards = (e) => {
     e.preventDefault();

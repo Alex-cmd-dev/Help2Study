@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 import { CalendarIcon, Trash2 } from "lucide-react"
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import api from "@/api"
+import topicService from "@/services/topicService"
 import { useState, useEffect } from "react"
 
 function FlashcardTopics() {
@@ -16,37 +16,36 @@ function FlashcardTopics() {
     getTopics()
   }, [])
 
-  const getTopics = () => {
+  const getTopics = async () => {
     setIsLoading(true)
-    api
-      .get("/api/topics/")
-      .then((res) => res.data)
-      .then((data) => {
-        setTopics(data)
-        setIsLoading(false)
-      })
-      .catch((err) => {
-        setError("Failed to load topics")
-        setIsLoading(false)
-        console.error(err)
-      })
+    try {
+      // Using topicService instead of calling API directly
+      const data = await topicService.getAllTopics()
+      setTopics(data)
+      setIsLoading(false)
+    } catch (err) {
+      setError("Failed to load topics")
+      setIsLoading(false)
+      console.error(err)
+    }
   }
 
-  const deleteTopic = (id, e) => {
+  const deleteTopic = async (id, e) => {
     // Prevent the click from navigating to the topic page
     e.stopPropagation()
     e.preventDefault()
 
     // Confirm before deleting
     if (window.confirm("Are you sure you want to delete this topic? This action cannot be undone.")) {
-      api
-        .delete(`/api/topic/delete/${id}`) //url pattern has to be exact
-        .then((res) => {
-          if (res.status === 204) alert("Topic deleted!")
-          else alert("Failed to delete topic.")
-          getTopics()
-        })
-        .catch((error) => alert(error))
+      try {
+        // Using topicService instead of calling API directly
+        await topicService.deleteTopic(id)
+        alert("Topic deleted!")
+        getTopics()
+      } catch (error) {
+        alert("Failed to delete topic.")
+        console.error(error)
+      }
     }
   }
 
