@@ -112,6 +112,12 @@ cd Help2Study
 setup.bat
 ```
 
+**Important for Windows users:** If the setup script stops after showing the npm version, you need to enable PowerShell script execution. Open PowerShell **as Administrator** and run:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+Then run `setup.bat` again. This is a one-time setup that allows npm to work properly.
+
 ---
 
 ## Get Your Gemini API Key
