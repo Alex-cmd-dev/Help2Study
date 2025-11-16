@@ -5,15 +5,6 @@ A full-stack application that uses AI to automatically generate flashcards from 
 Built with React, Django, and modern web technologies to demonstrate real-world full-stack development.
 
 ---
-
-## Why This Project Exists
-
-When I was learning full-stack development through tutorials, I could follow along and build things, but I didn't understand **why** certain decisions were made. Why this file structure? Why separate the API logic this way? How do all the pieces actually connect?
-
-This project bridges that gap. It's for CS students who learn better by seeing a complete, working system they can explore, understand, and modify. Every architectural decision is explained, and the code is structured to be readable and educational.
-
-I built this using a Tech with Tim tutorial as a starting point, then refactored and documented it to help others avoid the confusion I experienced.
-
 ## What You'll Learn
 
 By exploring and modifying this project, you'll understand:
