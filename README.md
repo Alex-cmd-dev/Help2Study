@@ -165,8 +165,17 @@ Once the app is running, here's your learning path:
 git clone https://github.com/Alex-cmd-dev/Help2Study.git
 cd Help2Study
 cp .env.example .env
-# Edit .env and add your Gemini API key from https://aistudio.google.com
 ```
+
+**Get your Gemini API key:**
+1. Go to https://aistudio.google.com and sign in with your Google account
+2. Click on "Get API Key" in the dashboard
+3. Click "Create API Key"
+4. Create a new project (or select an existing one)
+5. Select the project you want to use
+6. Click "Generate API Key"
+7. Copy the generated API key
+8. Open `.env` file and paste your API key: `GEMINI_API_KEY=your_key_here`
 
 **2. Install dependencies**
 ```bash
@@ -356,7 +365,12 @@ cd frontend && npm run dev
 ## Troubleshooting
 
 **Can't find API_KEY**
-→ Create `.env` file with your Gemini API key from https://aistudio.google.com
+→ Create `.env` file with your Gemini API key:
+   1. Visit https://aistudio.google.com
+   2. Sign in and click "Get API Key" in the dashboard
+   3. Create a new project or select an existing one
+   4. Generate the API key and copy it
+   5. Paste it in your `.env` file: `GEMINI_API_KEY=your_key_here`
 
 **Can't connect to backend**
 → Make sure Django is running: `make dev-backend`
