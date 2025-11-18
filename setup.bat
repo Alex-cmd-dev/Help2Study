@@ -51,7 +51,7 @@ echo.
 REM Check for .env file
 echo [3/6] Checking environment configuration...
 if not exist .env (
-    echo [WARNING] .env file not found
+    echo [WARNING] Backend .env file not found
     if exist .env.example (
         echo Creating .env from .env.example...
         copy .env.example .env
@@ -67,7 +67,25 @@ if not exist .env (
         exit /b 1
     )
 ) else (
-    echo [OK] .env file exists
+    echo [OK] Backend .env file exists
+)
+echo.
+
+REM Check for frontend .env file
+echo Checking frontend environment configuration...
+if not exist frontend\.env (
+    echo [WARNING] Frontend .env file not found
+    if exist frontend\.env.example (
+        echo Creating frontend\.env from frontend\.env.example...
+        copy frontend\.env.example frontend\.env
+        echo [OK] Frontend .env file created
+    ) else (
+        echo [ERROR] frontend\.env.example not found
+        pause
+        exit /b 1
+    )
+) else (
+    echo [OK] Frontend .env file exists
 )
 echo.
 

@@ -132,7 +132,7 @@ setup.bat
 
 The script will:
 - Check that Python and Node.js are installed
-- Create your `.env` file from `.env.example`
+- Create your `.env` files (backend and frontend) from examples
 - Install all dependencies
 - Set up the database
 - Guide you through any required steps
@@ -164,7 +164,10 @@ Once the app is running, here's your learning path:
 ```bash
 git clone https://github.com/Alex-cmd-dev/Help2Study.git
 cd Help2Study
+# Create backend .env
 cp .env.example .env
+# Create frontend .env
+cp frontend/.env.example frontend/.env
 ```
 
 **Get your Gemini API key:**
@@ -175,7 +178,11 @@ cp .env.example .env
 5. Select the project you want to use
 6. Click "Generate API Key"
 7. Copy the generated API key
-8. Open `.env` file and paste your API key: `GEMINI_API_KEY=your_key_here`
+8. Open `.env` file (in root directory) and paste your API key: `GEMINI_API_KEY=your_key_here`
+
+**Note:** The project uses two `.env` files:
+- `Help2Study/.env` - Backend configuration (contains `GEMINI_API_KEY`)
+- `Help2Study/frontend/.env` - Frontend configuration (contains `VITE_API_URL`)
 
 **2. Install dependencies**
 ```bash
@@ -372,7 +379,11 @@ cd frontend && npm run dev
    4. Generate the API key and copy it
    5. Paste it in your `.env` file: `GEMINI_API_KEY=your_key_here`
 
-**Can't connect to backend**
+**Can't connect to backend / Getting 404 errors**
+→ Make sure both `.env` files exist:
+   1. Backend `.env` in root directory: `Help2Study/.env`
+   2. Frontend `.env` in frontend directory: `Help2Study/frontend/.env`
+→ The frontend `.env` should contain: `VITE_API_URL=http://localhost:8000`
 → Make sure Django is running: `make dev-backend`
 
 **Database errors**

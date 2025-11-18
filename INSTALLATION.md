@@ -136,6 +136,30 @@ wh
 
 ---
 
+## Environment Configuration (Important!)
+
+This project uses **two separate `.env` files**:
+
+### 1. Backend `.env` file (in the root directory)
+**Location:** `Help2Study/.env`
+**Contains:** Django backend configuration
+- `GEMINI_API_KEY` - Your Google Gemini API key
+- `SECRET_KEY` - Django secret key (optional for development)
+- Other backend settings
+
+The setup script creates this automatically from `.env.example`.
+
+### 2. Frontend `.env` file (in the frontend directory)
+**Location:** `Help2Study/frontend/.env`
+**Contains:** React/Vite frontend configuration
+- `VITE_API_URL` - The URL of your backend server
+
+The setup script creates this automatically from `frontend/.env.example`.
+
+**IMPORTANT:** Both files are created automatically by the setup script. If you're setting up manually or having connection issues, make sure both files exist!
+
+---
+
 ## Start the App
 
 ### For macOS/Linux users:

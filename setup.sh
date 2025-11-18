@@ -66,7 +66,7 @@ echo ""
 # Check for .env file
 echo -e "${BLUE}[3/6]${NC} Checking environment configuration..."
 if [ ! -f .env ]; then
-    echo -e "${YELLOW}[WARNING]${NC} .env file not found"
+    echo -e "${YELLOW}[WARNING]${NC} Backend .env file not found"
     if [ -f .env.example ]; then
         echo "Creating .env from .env.example..."
         cp .env.example .env
@@ -80,7 +80,24 @@ if [ ! -f .env ]; then
         exit 1
     fi
 else
-    echo -e "${GREEN}[OK]${NC} .env file exists"
+    echo -e "${GREEN}[OK]${NC} Backend .env file exists"
+fi
+echo ""
+
+# Check for frontend .env file
+echo "Checking frontend environment configuration..."
+if [ ! -f frontend/.env ]; then
+    echo -e "${YELLOW}[WARNING]${NC} Frontend .env file not found"
+    if [ -f frontend/.env.example ]; then
+        echo "Creating frontend/.env from frontend/.env.example..."
+        cp frontend/.env.example frontend/.env
+        echo -e "${GREEN}[OK]${NC} Frontend .env file created"
+    else
+        echo -e "${RED}[ERROR]${NC} frontend/.env.example not found"
+        exit 1
+    fi
+else
+    echo -e "${GREEN}[OK]${NC} Frontend .env file exists"
 fi
 echo ""
 
