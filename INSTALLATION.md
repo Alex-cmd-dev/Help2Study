@@ -83,8 +83,8 @@ git --version
 ### macOS:
 
 ```bash
-# Go to your Documents folder
-cd ~/Documents
+# Go to your Downloads folder
+cd Downloads
 
 # Download the project
 git clone https://github.com/Alex-cmd-dev/Help2Study.git
@@ -98,9 +98,17 @@ cd Help2Study
 
 ### Windows:
 
+**Important - Do this first!** Before running the setup script, enable PowerShell script execution. Open PowerShell **as Administrator** and run:
 ```powershell
-# Go to your Documents folder
-cd Documents
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+This is a one-time setup that allows npm to work properly. After running this command, you can close the Administrator PowerShell window.
+
+Then, in a regular PowerShell or Command Prompt window:
+
+```powershell
+# Go to your Downloads folder
+cd Downloads
 
 # Download the project
 git clone https://github.com/Alex-cmd-dev/Help2Study.git
@@ -111,13 +119,7 @@ cd Help2Study
 # Run automated setup
 ./setup.bat
 ```
-
-**Important for Windows users:** If the setup script stops after showing the npm version, you need to enable PowerShell script execution. Open PowerShell **as Administrator** and run:
-```powershell
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-```
-Then run `setup.bat` again. This is a one-time setup that allows npm to work properly.
-
+wh
 ---
 
 ## Get Your Gemini API Key

@@ -10,6 +10,13 @@ echo ============================================
 echo Help2Study - Automated Setup (Windows)
 echo ============================================
 echo.
+echo IMPORTANT: Before proceeding, make sure you've set PowerShell execution policy.
+echo If you haven't done this yet, press Ctrl+C to cancel, then run as Administrator:
+echo   Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+echo.
+echo Press any key to continue with setup...
+pause >nul
+echo.
 
 REM Check Python
 echo [1/6] Checking Python installation...
@@ -37,7 +44,7 @@ if errorlevel 1 (
 )
 
 node --version
-npm --version
+call npm.cmd --version
 echo [OK] Node.js and npm are installed
 echo.
 
@@ -81,10 +88,18 @@ echo.
 
 REM Install frontend dependencies
 echo [5/6] Installing Node.js dependencies...
+echo This may take a few minutes...
 cd frontend
-call npm install
+call npm.cmd install
 if errorlevel 1 (
     echo [ERROR] Failed to install Node.js dependencies
+    echo.
+    echo Common causes:
+    echo 1. PowerShell execution policy not set - Run as Administrator:
+    echo    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+    echo 2. Network connection issues
+    echo 3. npm cache issues - Try: npm cache clean --force
+    echo.
     cd ..
     pause
     exit /b 1
