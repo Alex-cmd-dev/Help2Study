@@ -61,6 +61,9 @@ winget install OpenJS.NodeJS.LTS
 
 # Install Git
 winget install Git.Git
+
+# Install Make (for running 'make dev' commands)
+winget install GnuWin32.Make
 ```
 
 ### 3. Restart your terminal and verify
@@ -72,6 +75,7 @@ python --version
 node --version
 npm --version
 git --version
+make --version
 ```
 
 **Note:** If `python` doesn't work, try `python3` or `py`.
@@ -138,33 +142,34 @@ wh
 
 ## Start the App
 
+If you installed Make (recommended), simply run:
 ```bash
 make dev
 ```
 
-**Windows without Make:**
-```powershell
-# Terminal 1:
+This starts both the backend and frontend servers automatically.
+
+**If Make is not installed or doesn't work:**
+
+Open **two separate terminal windows** and run:
+
+**Terminal 1 - Backend:**
+```bash
 cd backend
 python manage.py runserver
-
-# Terminal 2:
-cd frontend
-npm run dev
 ```
 
-**macOS without Make:**
+**Terminal 2 - Frontend:**
 ```bash
-# Terminal 1:
-cd backend
-python3 manage.py runserver
-
-# Terminal 2 (Cmd+T for new tab):
 cd frontend
 npm run dev
 ```
 
-Open http://localhost:5173 in your browser!
+Once both servers are running:
+- Backend: http://localhost:8000
+- Frontend: http://localhost:5173
+
+Open http://localhost:5173 in your browser to use the app!
 
 ---
 

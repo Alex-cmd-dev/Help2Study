@@ -126,15 +126,39 @@ echo ============================================
 echo Setup Complete!
 echo ============================================
 echo.
-echo To start the development servers, run:
-echo   make dev
-echo.
-echo Or start them separately:
-echo   make dev-backend   (Django on http://localhost:8000)
-echo   make dev-frontend  (React on http://localhost:5173)
-echo.
-echo Note: If 'make' is not available on Windows, you can use:
-echo   Backend:  cd backend ^&^& python manage.py runserver
-echo   Frontend: cd frontend ^&^& npm run dev
-echo.
+
+REM Check if make is installed
+make --version >nul 2>&1
+if errorlevel 1 (
+    echo [WARNING] 'make' is not installed
+    echo.
+    echo You have two options to start the servers:
+    echo.
+    echo OPTION 1 - Install Make ^(Recommended^):
+    echo   winget install GnuWin32.Make
+    echo   Then restart your terminal and run: make dev
+    echo.
+    echo OPTION 2 - Start servers manually:
+    echo   Open TWO separate terminal windows:
+    echo.
+    echo   Terminal 1 - Backend:
+    echo     cd backend
+    echo     python manage.py runserver
+    echo.
+    echo   Terminal 2 - Frontend:
+    echo     cd frontend
+    echo     npm run dev
+    echo.
+    echo Then visit: http://localhost:5173
+    echo.
+) else (
+    echo To start the development servers, run:
+    echo   make dev
+    echo.
+    echo Or start them separately:
+    echo   make dev-backend   ^(Django on http://localhost:8000^)
+    echo   make dev-frontend  ^(React on http://localhost:5173^)
+    echo.
+)
+
 pause
