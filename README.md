@@ -165,7 +165,7 @@ Once the app is running, here's your learning path:
 git clone https://github.com/Alex-cmd-dev/Help2Study.git
 cd Help2Study
 cp .env.example .env
-# Edit .env and add your Gemini API key
+# Edit .env and add your Gemini API key from https://aistudio.google.com
 ```
 
 **2. Install dependencies**
@@ -356,7 +356,7 @@ cd frontend && npm run dev
 ## Troubleshooting
 
 **Can't find API_KEY**
-→ Create `.env` file with your Gemini API key
+→ Create `.env` file with your Gemini API key from https://aistudio.google.com
 
 **Can't connect to backend**
 → Make sure Django is running: `make dev-backend`

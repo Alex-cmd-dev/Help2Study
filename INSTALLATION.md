@@ -122,9 +122,9 @@ Then run `setup.bat` again. This is a one-time setup that allows npm to work pro
 
 ## Get Your Gemini API Key
 
-1. Go to https://makersuite.google.com/app/apikey
+1. Go to https://aistudio.google.com
 2. Sign in with Google
-3. Click "Create API Key"
+3. Click "Get API Key" or "Create API Key"
 4. Copy the key
 5. When setup script asks, paste it in the `.env` file
 
