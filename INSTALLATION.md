@@ -109,7 +109,7 @@ git clone https://github.com/Alex-cmd-dev/Help2Study.git
 cd Help2Study
 
 # Run automated setup
-setup.bat
+./setup.bat
 ```
 
 **Important for Windows users:** If the setup script stops after showing the npm version, you need to enable PowerShell script execution. Open PowerShell **as Administrator** and run:
