@@ -132,7 +132,12 @@ wh
 6. Select the project you want to use for this application
 7. Click "Generate API Key"
 8. Copy the generated API key
-9. When the setup script asks, paste it in the `.env` file as: `GEMINI_API_KEY=your_key_here`
+9. Open the `.env` file and paste your API key as: `GEMINI_API_KEY=your_key_here`
+
+**Windows tip:** To quickly open the `.env` file in Notepad, run:
+```powershell
+Invoke-Item ".env"
+```
 
 ---
 
