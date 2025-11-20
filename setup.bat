@@ -90,18 +90,40 @@ if not exist frontend\.env (
 echo.
 
 REM Install backend dependencies
-echo [4/6] Installing Python dependencies...
+echo [4/6] Setting up Python virtual environment...
 cd backend
+
+REM Create virtual environment if it doesn't exist
+if not exist venv (
+    echo Creating virtual environment...
+    python -m venv venv
+    if errorlevel 1 (
+        echo [ERROR] Failed to create virtual environment
+        cd ..
+        pause
+        exit /b 1
+    )
+    echo [OK] Virtual environment created
+) else (
+    echo [OK] Virtual environment already exists
+)
+
+REM Activate virtual environment and install dependencies
+echo Activating virtual environment and installing dependencies...
+call venv\Scripts\activate.bat
 python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 if errorlevel 1 (
     echo [ERROR] Failed to install Python dependencies
+    call deactivate
     cd ..
     pause
     exit /b 1
 )
+call deactivate
+
 cd ..
-echo [OK] Python dependencies installed
+echo [OK] Python dependencies installed in virtual environment
 echo.
 
 REM Install frontend dependencies
@@ -129,13 +151,16 @@ echo.
 REM Run migrations
 echo [6/6] Setting up database...
 cd backend
+call venv\Scripts\activate.bat
 python manage.py migrate
 if errorlevel 1 (
     echo [ERROR] Failed to run database migrations
+    call deactivate
     cd ..
     pause
     exit /b 1
 )
+call deactivate
 cd ..
 echo [OK] Database initialized
 echo.
@@ -150,6 +175,7 @@ echo Open TWO separate Command Prompt or PowerShell windows:
 echo.
 echo   Window 1 - Backend:
 echo     cd backend
+echo     venv\Scripts\activate.bat
 echo     python manage.py runserver
 echo.
 echo   Window 2 - Frontend:
@@ -157,6 +183,9 @@ echo     cd frontend
 echo     npm run dev
 echo.
 echo Then visit: http://localhost:5173
+echo.
+echo NOTE: The backend now uses a virtual environment (venv)
+echo       Remember to activate it with: venv\Scripts\activate.bat
 echo.
 echo To stop the servers later, press Ctrl+C in each window.
 echo.

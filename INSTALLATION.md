@@ -118,10 +118,11 @@ git clone https://github.com/Alex-cmd-dev/Help2Study.git
 # Go into the project
 cd Help2Study
 
-# Run automated setup
+# Run automated setup (creates virtual environment automatically)
 ./setup.bat
 ```
-wh
+
+**Note:** The setup script automatically creates a Python virtual environment in `backend\venv` and installs all dependencies within it. This keeps your project isolated from system Python packages.
 ---
 
 ## Get Your Gemini API Key
@@ -196,6 +197,7 @@ Open **two separate Command Prompt or PowerShell windows**:
 **Window 1 - Start the Backend:**
 ```bash
 cd backend
+venv\Scripts\activate.bat
 python manage.py runserver
 ```
 
@@ -204,6 +206,8 @@ python manage.py runserver
 cd frontend
 npm run dev
 ```
+
+**Note:** The first command activates the virtual environment before starting the server.
 
 Once both servers are running:
 - Backend: http://localhost:8000
