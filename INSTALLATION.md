@@ -92,9 +92,11 @@ git clone https://github.com/Alex-cmd-dev/Help2Study.git
 # Go into the project
 cd Help2Study
 
-# Run automated setup
+# Run automated setup (creates virtual environment automatically)
 ./setup.sh
 ```
+
+**Note:** The setup script automatically creates a Python virtual environment in `backend/venv` and installs all dependencies within it. This keeps your project isolated from system Python packages.
 
 ### Windows:
 
@@ -173,7 +175,19 @@ The setup script creates this automatically from `frontend/.env.example`.
 make dev
 ```
 
-This starts both servers automatically.
+This starts both servers automatically (the virtual environment is activated automatically).
+
+**Manual startup (if not using make):**
+```bash
+# Backend (in one terminal)
+cd backend
+source venv/bin/activate
+python manage.py runserver
+
+# Frontend (in another terminal)
+cd frontend
+npm run dev
+```
 
 ### For Windows users:
 

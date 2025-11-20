@@ -102,12 +102,27 @@ fi
 echo ""
 
 # Install backend dependencies
-echo -e "${BLUE}[4/6]${NC} Installing Python dependencies..."
+echo -e "${BLUE}[4/6]${NC} Setting up Python virtual environment..."
 cd backend
-python3 -m pip install --upgrade pip
-python3 -m pip install -r requirements.txt
+
+# Create virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "Creating virtual environment..."
+    python3 -m venv venv
+    echo -e "${GREEN}[OK]${NC} Virtual environment created"
+else
+    echo -e "${GREEN}[OK]${NC} Virtual environment already exists"
+fi
+
+# Activate virtual environment and install dependencies
+echo "Activating virtual environment and installing dependencies..."
+source venv/bin/activate
+pip install --upgrade pip
+pip install -r requirements.txt
+deactivate
+
 cd ..
-echo -e "${GREEN}[OK]${NC} Python dependencies installed"
+echo -e "${GREEN}[OK]${NC} Python dependencies installed in virtual environment"
 echo ""
 
 # Install frontend dependencies
@@ -121,7 +136,9 @@ echo ""
 # Run migrations
 echo -e "${BLUE}[6/6]${NC} Setting up database..."
 cd backend
-python3 manage.py migrate
+source venv/bin/activate
+python manage.py migrate
+deactivate
 cd ..
 echo -e "${GREEN}[OK]${NC} Database initialized"
 echo ""
@@ -136,6 +153,9 @@ echo ""
 echo "Or start them separately:"
 echo "  make dev-backend   (Django on http://localhost:8000)"
 echo "  make dev-frontend  (React on http://localhost:5173)"
+echo ""
+echo -e "${YELLOW}Note:${NC} The backend now uses a virtual environment (venv)"
+echo "If running backend manually: cd backend && source venv/bin/activate && python manage.py runserver"
 echo ""
 echo "Happy coding!"
 echo ""

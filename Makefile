@@ -22,7 +22,14 @@ install: install-backend install-frontend
 # Install backend dependencies
 install-backend:
 	@echo "Installing backend dependencies..."
-	@cd backend && python -m pip install -r requirements.txt
+	@cd backend && \
+	if [ ! -d "venv" ]; then \
+		echo "Creating virtual environment..."; \
+		python3 -m venv venv; \
+	fi && \
+	. venv/bin/activate && \
+	pip install --upgrade pip && \
+	pip install -r requirements.txt
 
 # Install frontend dependencies
 install-frontend:
@@ -36,13 +43,13 @@ setup: install
 		echo ".env file not found! Please copy .env.example to .env and fill in your values."; \
 		exit 1; \
 	fi
-	@cd backend && python manage.py migrate
+	@cd backend && . venv/bin/activate && python manage.py migrate
 	@echo "Setup complete! Run 'make dev' to start the development servers."
 
 # Run database migrations
 migrate:
 	@echo "Running database migrations..."
-	@cd backend && python manage.py migrate
+	@cd backend && . venv/bin/activate && python manage.py migrate
 
 # Start both servers (in parallel using background processes)
 dev:
@@ -51,13 +58,13 @@ dev:
 	@echo "Frontend will run on http://localhost:5173"
 	@echo ""
 	@trap 'kill 0' EXIT; \
-	(cd backend && python manage.py runserver) & \
+	(cd backend && . venv/bin/activate && python manage.py runserver) & \
 	(cd frontend && npm run dev)
 
 # Start backend server only
 dev-backend:
 	@echo "Starting Django backend server on http://localhost:8000..."
-	@cd backend && python manage.py runserver
+	@cd backend && . venv/bin/activate && python manage.py runserver
 
 # Start frontend server only
 dev-frontend:
@@ -72,7 +79,7 @@ lint:
 # Run tests
 test:
 	@echo "Running tests..."
-	@cd backend && python manage.py test
+	@cd backend && . venv/bin/activate && python manage.py test
 	@echo "Backend tests complete!"
 
 # Clean temporary files
@@ -82,4 +89,5 @@ clean:
 	@find . -type f -name "*.pyc" -delete
 	@find . -type d -name "*.egg-info" -exec rm -rf {} + 2>/dev/null || true
 	@rm -rf backend/temp_files
-	@echo "Clean complete!"
+	@rm -rf backend/venv
+	@echo "Clean complete! (Note: virtual environment removed)"
